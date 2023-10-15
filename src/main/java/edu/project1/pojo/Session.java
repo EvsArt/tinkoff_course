@@ -21,7 +21,9 @@ public class Session {
         do {
             attemptResult = nextAttempt();
         }
-        while (attemptResult != AttemptResult.LOSS && attemptResult != AttemptResult.WINNING);
+        while (attemptResult != AttemptResult.LOSS
+            && attemptResult != AttemptResult.WINNING
+            && attemptResult != AttemptResult.EXIT);
     }
 
     private AttemptResult nextAttempt() {
@@ -29,13 +31,19 @@ public class Session {
 
         IOUtils.consoleLineOutput();
         IOUtils.consoleLineOutput(StringConstraints.guessALetter);
-        String letterString = IOUtils.consoleLineInput();
-        if (letterString.length() != 1 || !Character.isAlphabetic(letterString.charAt(0))) {
+        String input = IOUtils.consoleLineInput();
+
+        if (input.equals(StringConstraints.stringForExit)) {
+            attemptResult = AttemptResult.EXIT;
+            return attemptResult;
+        }
+
+        if (input.length() != 1 || !Character.isAlphabetic(input.charAt(0))) {
             attemptResult = AttemptResult.WRONGINPUT;
             attemptResult.doResultActivity();
             return attemptResult;
         }
-        char letter = letterString.charAt(0);
+        char letter = input.charAt(0);
 
         attemptResult = tryToGuessWord(letter);
         IOUtils.consoleLineOutput(StringConstraints.stringMistakesCount(curMistakesNum, maxMistakes));

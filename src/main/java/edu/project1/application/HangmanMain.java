@@ -1,6 +1,6 @@
 package edu.project1.application;
 
-public class HangmanMain {
+public final class HangmanMain {
 
     private HangmanMain() {
     }

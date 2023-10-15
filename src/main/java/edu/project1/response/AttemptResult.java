@@ -10,7 +10,8 @@ public enum AttemptResult {
     SUCCESSFULGUESS(() -> IOUtils.consoleLineOutput(StringConstraints.successGuessMsg)),
     FAILEDGUESS(() -> IOUtils.consoleLineOutput(StringConstraints.failedGuessMsg)),
     WRONGINPUT(() -> IOUtils.consoleLineOutput(StringConstraints.wrongInputMsg)),
-    USELESSINPUT(() -> IOUtils.consoleLineOutput(StringConstraints.uselessInput));
+    USELESSINPUT(() -> IOUtils.consoleLineOutput(StringConstraints.uselessInput)),
+    EXIT(() -> IOUtils.consoleLineOutput(StringConstraints.goodbye));
     private final AttemptResultActivity attemptResultActivity;
 
     AttemptResult(AttemptResultActivity attemptResultActivity) {
