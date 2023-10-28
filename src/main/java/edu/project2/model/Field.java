@@ -6,4 +6,14 @@ public interface Field {
 
     void changeWay(Position pos, SideEnum side, boolean closing) throws FieldBorderException;
 
+    Cell getCell(Position position);
+
+    int getHeight();
+
+    int getWidth();
+
+    void unmarkAllCells();
+
+    void closeAllCells();
+
 }

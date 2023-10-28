@@ -5,6 +5,6 @@ public final class Constraints {
     private Constraints() {
     }
 
-    public static final int MAZESIZE = 20;
+    public static final int MAZESIZE = 35;
 
 }

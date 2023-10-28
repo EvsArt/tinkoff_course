@@ -23,10 +23,10 @@ class DefaultFieldTest {
             assertThat(field.getField().get(i).size()).isEqualTo(width);
             for (int j = 0; j < width; j++) {
                 DefaultCell cell = (DefaultCell) field.getCell(new Position(j, i));
-                assertThat(cell.getWalls().isBottom()).isTrue();
-                assertThat(cell.getWalls().isRight()).isTrue();
-                assertThat(cell.getWalls().isLeft()).isTrue();
-                assertThat(cell.getWalls().isTop()).isTrue();
+                assertThat(cell.getWalls().bottom()).isTrue();
+                assertThat(cell.getWalls().right()).isTrue();
+                assertThat(cell.getWalls().left()).isTrue();
+                assertThat(cell.getWalls().top()).isTrue();
             }
         }
 
@@ -45,40 +45,40 @@ class DefaultFieldTest {
         DefaultCell cell;
 
         cell = (DefaultCell) field.getCell(new Position(1, 1));    // center
-        assertThat(cell.getWalls().isTop()).isFalse();
-        assertThat(cell.getWalls().isLeft()).isFalse();
-        assertThat(cell.getWalls().isRight()).isFalse();
-        assertThat(cell.getWalls().isBottom()).isFalse();
+        assertThat(cell.getWalls().top()).isFalse();
+        assertThat(cell.getWalls().left()).isFalse();
+        assertThat(cell.getWalls().right()).isFalse();
+        assertThat(cell.getWalls().bottom()).isFalse();
 
         cell = (DefaultCell) field.getCell(new Position(0, 0));    // non-active cell
-        assertThat(cell.getWalls().isLeft()).isTrue();
-        assertThat(cell.getWalls().isRight()).isTrue();
-        assertThat(cell.getWalls().isTop()).isTrue();
-        assertThat(cell.getWalls().isBottom()).isTrue();
+        assertThat(cell.getWalls().left()).isTrue();
+        assertThat(cell.getWalls().right()).isTrue();
+        assertThat(cell.getWalls().top()).isTrue();
+        assertThat(cell.getWalls().bottom()).isTrue();
 
         cell = (DefaultCell) field.getCell(new Position(0, 1));    // left cell
-        assertThat(cell.getWalls().isLeft()).isTrue();
-        assertThat(cell.getWalls().isRight()).isFalse();
-        assertThat(cell.getWalls().isTop()).isTrue();
-        assertThat(cell.getWalls().isBottom()).isTrue();
+        assertThat(cell.getWalls().left()).isTrue();
+        assertThat(cell.getWalls().right()).isFalse();
+        assertThat(cell.getWalls().top()).isTrue();
+        assertThat(cell.getWalls().bottom()).isTrue();
 
         cell = (DefaultCell) field.getCell(new Position(2, 1));    // right cell
-        assertThat(cell.getWalls().isLeft()).isFalse();
-        assertThat(cell.getWalls().isRight()).isTrue();
-        assertThat(cell.getWalls().isTop()).isTrue();
-        assertThat(cell.getWalls().isBottom()).isTrue();
+        assertThat(cell.getWalls().left()).isFalse();
+        assertThat(cell.getWalls().right()).isTrue();
+        assertThat(cell.getWalls().top()).isTrue();
+        assertThat(cell.getWalls().bottom()).isTrue();
 
         cell = (DefaultCell) field.getCell(new Position(1, 0));    // top cell
-        assertThat(cell.getWalls().isLeft()).isTrue();
-        assertThat(cell.getWalls().isRight()).isTrue();
-        assertThat(cell.getWalls().isTop()).isTrue();
-        assertThat(cell.getWalls().isBottom()).isFalse();
+        assertThat(cell.getWalls().left()).isTrue();
+        assertThat(cell.getWalls().right()).isTrue();
+        assertThat(cell.getWalls().top()).isTrue();
+        assertThat(cell.getWalls().bottom()).isFalse();
 
         cell = (DefaultCell) field.getCell(new Position(1, 2));    // bottom cell
-        assertThat(cell.getWalls().isLeft()).isTrue();
-        assertThat(cell.getWalls().isRight()).isTrue();
-        assertThat(cell.getWalls().isTop()).isFalse();
-        assertThat(cell.getWalls().isBottom()).isTrue();
+        assertThat(cell.getWalls().left()).isTrue();
+        assertThat(cell.getWalls().right()).isTrue();
+        assertThat(cell.getWalls().top()).isFalse();
+        assertThat(cell.getWalls().bottom()).isTrue();
 
     }
 
@@ -98,6 +98,78 @@ class DefaultFieldTest {
     @Test
     @DisplayName("Test converting to string")
     void testToString() {
-        // TODO: 20.10.2023
+
+        DefaultField field = new DefaultField(20, 20);
+
+        String expectedNewFieldString =
+            """
+
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                """;
+
+        String newFieldString = field.toString();
+
+        field.changeWay(new Position(0,0), SideEnum.RIGHT, false);
+        field.changeWay(new Position(0,0), SideEnum.BOTTOM, false);
+        field.changeWay(new Position(1,0), SideEnum.LEFT, false);
+        field.changeWay(new Position(2,0), SideEnum.LEFT, false);
+        field.changeWay(new Position(2,1), SideEnum.TOP, false);
+        field.changeWay(new Position(2,1), SideEnum.LEFT, false);
+        field.changeWay(new Position(2,1), SideEnum.BOTTOM, false);
+        field.changeWay(new Position(2,1), SideEnum.RIGHT, false);
+        field.getCell(new Position(0, 0)).mark(true);
+        field.getCell(new Position(1, 2)).mark(true);
+        field.getCell(new Position(4, 4)).mark(true);
+        field.getCell(new Position(0, 1)).mark(true);
+
+        String expectedFieldAfterChangesString =
+            """
+
+                ⡿⠏⣉⣉⠉⢹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣷⣾⣏⣉⠀⠀⣉⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣿⣿⣇⣸⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣿⣿⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                ⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹⣏⣹
+                """;
+
+        String fieldAfterChangesString = field.toString();
+
+        assertThat(newFieldString).isEqualTo(expectedNewFieldString);
+        assertThat(fieldAfterChangesString).isEqualTo(expectedFieldAfterChangesString);
+
     }
 }

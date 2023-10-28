@@ -13,6 +13,10 @@ public class Maze {
 
     }
 
+    public Field getField() {
+        return field;
+    }
+
     @Override
     public String toString() {
         return field.toString();

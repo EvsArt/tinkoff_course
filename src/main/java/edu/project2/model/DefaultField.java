@@ -3,12 +3,13 @@ package edu.project2.model;
 import edu.project2.constraints.StringConstraints;
 import edu.project2.exceptions.FieldBorderException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultField implements Field {
 
     private final int height;
     private final int width;
-    private final ArrayList<ArrayList<Cell>> field;
+    private final List<List<Cell>> field;
 
     public DefaultField(int height, int width) {    // return field where every cell is closed
 
@@ -24,12 +25,22 @@ public class DefaultField implements Field {
         }
     }
 
-    public ArrayList<ArrayList<Cell>> getField() {
+    public List<List<Cell>> getField() {
         return field;
     }
 
     public Cell getCell(Position pos) {
         return field.get(pos.y()).get(pos.x());
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
     }
 
     @Override
@@ -70,10 +81,42 @@ public class DefaultField implements Field {
 
     }
 
+    public void unmarkAllCells() {
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                getCell(new Position(x, y)).mark(false);
+            }
+        }
+    }
+
+    public void closeAllCells() {
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                getCell(new Position(x, y)).setWalls(
+                    new DefaultCell.DefaultWalls(true, true, true, true)
+                );
+            }
+        }
+
+    }
+
     @Override
     public String toString() {
-        // TODO: 20.10.2023 create pretty print
-        return field.toString();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append('\n');
+
+        for (List<Cell> raw : field) {
+            for (Cell cell : raw) {
+                builder.append(cell.toString());
+            }
+            builder.append("\n");
+        }
+
+        return builder.toString();
+
     }
 
 }
