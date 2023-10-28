@@ -1,6 +1,7 @@
 package edu.project2.model;
 
 import edu.project2.exceptions.FieldBorderException;
+import java.util.List;
 
 public interface Field {
 
@@ -15,5 +16,7 @@ public interface Field {
     void unmarkAllCells();
 
     void closeAllCells();
+
+    void markAllCellsInList(List<Position> positions);
 
 }

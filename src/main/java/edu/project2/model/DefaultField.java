@@ -82,7 +82,6 @@ public class DefaultField implements Field {
     }
 
     public void unmarkAllCells() {
-
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 getCell(new Position(x, y)).mark(false);
@@ -91,7 +90,6 @@ public class DefaultField implements Field {
     }
 
     public void closeAllCells() {
-
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 getCell(new Position(x, y)).setWalls(
@@ -99,7 +97,12 @@ public class DefaultField implements Field {
                 );
             }
         }
+    }
 
+    public void markAllCellsInList(List<Position> list) {
+        for (Position pos : list) {
+            getCell(pos).mark(true);
+        }
     }
 
     @Override

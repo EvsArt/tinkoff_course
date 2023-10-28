@@ -1,6 +1,6 @@
 package edu.project2.model;
 
-import edu.project2.service.Generator;
+import edu.project2.service.generator.Generator;
 
 public class Maze {
 

@@ -1,6 +1,10 @@
-package edu.project2.model;
+package edu.project2.service.generator;
 
-import edu.project2.service.Generator;
+import edu.project2.model.Cell;
+import edu.project2.model.CellWithPosition;
+import edu.project2.model.Field;
+import edu.project2.model.Position;
+import edu.project2.model.SideEnum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,14 +25,14 @@ public class RecursiveBacktrackingGenerator implements Generator {
         var curCellPos = new CellWithPosition(field.getCell(position), position);
 
         do {
-            curCellPos.cell.mark(true);
+            curCellPos.cell().mark(true);
 
-            List<Neighbor> unvisitedNeighbors = getUnvisitedNeighboringCells(field, curCellPos.position);
+            List<Neighbor> unvisitedNeighbors = getUnvisitedNeighboringCells(field, curCellPos.position());
             if (!unvisitedNeighbors.isEmpty()) {
                 Neighbor neighbor = unvisitedNeighbors.get(random.nextInt(unvisitedNeighbors.size()));
 
-                field.changeWay(curCellPos.position, neighbor.side, false);
-                position = getNewPosAfterMoving(curCellPos.position, neighbor.side);
+                field.changeWay(curCellPos.position(), neighbor.side, false);
+                position = curCellPos.position().getNewPosAfterMoving(neighbor.side);
 
                 var neighborCell = new CellWithPosition(neighbor.cell, position);
                 cellStack.push(neighborCell);
@@ -86,23 +90,7 @@ public class RecursiveBacktrackingGenerator implements Generator {
 
     }
 
-    private Position getNewPosAfterMoving(Position oldPos, SideEnum side) {
-
-        int x = oldPos.x();
-        int y = oldPos.y();
-
-        return switch (side) {
-            case LEFT -> new Position(x - 1, y);
-            case TOP -> new Position(x, y - 1);
-            case RIGHT -> new Position(x + 1, y);
-            case BOTTOM -> new Position(x, y + 1);
-        };
-    }
-
     private record Neighbor(SideEnum side, Cell cell) {
-    }
-
-    private record CellWithPosition(Cell cell, Position position) {
     }
 
 }

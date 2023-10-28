@@ -1,4 +1,4 @@
-package edu.project2.service;
+package edu.project2.service.generator;
 
 import edu.project2.model.Field;
 

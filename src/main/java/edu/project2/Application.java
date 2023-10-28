@@ -1,13 +1,13 @@
 package edu.project2;
 
 import edu.project2.constraints.Constraints;
-import edu.project2.model.DefaultSolver;
-import edu.project2.model.Field;
 import edu.project2.model.Maze;
 import edu.project2.model.Position;
-import edu.project2.model.RecursiveBacktrackingGenerator;
-import edu.project2.service.Generator;
-import edu.project2.service.Solver;
+import edu.project2.service.generator.Generator;
+import edu.project2.service.generator.RecursiveBacktrackingGenerator;
+import edu.project2.service.solver.BFSSolver;
+import edu.project2.service.solver.Solver;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,25 +15,43 @@ public class Application {
 
     private final Logger logger = LogManager.getLogger();
     private final Generator generator = new RecursiveBacktrackingGenerator();
-//    private final Solver solver = new DefaultSolver();
+    private final Solver solver = new BFSSolver();
 
-    int height = Constraints.MAZESIZE;
-    int width = Constraints.MAZESIZE;
+    int height = Constraints.MAZEHEGHT;
+    int width = Constraints.MAZEWIDTH;
 
     public void run() {
 
-        Maze unsolvedMaze = new Maze(height, width, generator);
+        logger.info("Please switch line height to minimum for correct output");
 
-        Field field = unsolvedMaze.getField();
+        Maze maze = new Maze(height, width, generator);
+        logger.info(maze);
 
         Position startPos = new Position(0, 0);
         Position endPos = new Position(width - 1, height - 1);
 
-//        Maze solvedMaze = solver.solve(unsolvedMaze, startPos, endPos);
+        List<Position> solution = solver.solve(maze, startPos, endPos);
 
-        logger.info(unsolvedMaze);
-//        logger.info(solvedMaze);
+        logger.info(maze);
+        logger.info("");
+        logger.info("Solution: ");
+
+        logger.info(Position.positionsListToString(solution));
 
     }
+
+//    private String positionsListToString(List<Position> positions) {
+//
+//        StringBuilder builder = new StringBuilder();
+//
+//        positions.forEach(
+//            it -> builder.append(
+//                String.format("-> (%s, %s) ", it.x(), it.y())
+//            )
+//        );
+//
+//        return builder.toString();
+//
+//    }
 
 }
