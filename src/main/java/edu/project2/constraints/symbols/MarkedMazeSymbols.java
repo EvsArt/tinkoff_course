@@ -22,6 +22,7 @@ public enum MarkedMazeSymbols implements Symbols {
     CELLCLOSED(DefaultCell.getCell(true, true, true, true), "⣿⣿"),
     CELLOPENED(DefaultCell.getCell(false, false, false, false), "⠰⠆");
 
+
     private final Cell cell;
     private final String value;
 

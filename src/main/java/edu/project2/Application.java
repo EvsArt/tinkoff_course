@@ -6,6 +6,7 @@ import edu.project2.model.Position;
 import edu.project2.service.generator.Generator;
 import edu.project2.service.generator.RecursiveBacktrackingGenerator;
 import edu.project2.service.solver.BFSSolver;
+import edu.project2.service.solver.DFSSolver;
 import edu.project2.service.solver.Solver;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +16,8 @@ public class Application {
 
     private final Logger logger = LogManager.getLogger();
     private final Generator generator = new RecursiveBacktrackingGenerator();
-    private final Solver solver = new BFSSolver();
+    private final Solver solver1 = new BFSSolver();
+    private final Solver solver2 = new DFSSolver();
 
     int height = Constraints.MAZEHEGHT;
     int width = Constraints.MAZEWIDTH;
@@ -30,28 +32,16 @@ public class Application {
         Position startPos = new Position(0, 0);
         Position endPos = new Position(width - 1, height - 1);
 
-        List<Position> solution = solver.solve(maze, startPos, endPos);
-
+        logger.info("BFS Solution: ");
+        List<Position> solution1 = solver1.solve(maze, startPos, endPos);
         logger.info(maze);
-        logger.info("");
-        logger.info("Solution: ");
+        logger.info(Position.positionsListToString(solution1));
 
-        logger.info(Position.positionsListToString(solution));
+        logger.info("DFS Solution: ");
+        List<Position> solution2 = solver2.solve(maze, startPos, endPos);
+        logger.info(maze);
+        logger.info(Position.positionsListToString(solution2));
 
     }
-
-//    private String positionsListToString(List<Position> positions) {
-//
-//        StringBuilder builder = new StringBuilder();
-//
-//        positions.forEach(
-//            it -> builder.append(
-//                String.format("-> (%s, %s) ", it.x(), it.y())
-//            )
-//        );
-//
-//        return builder.toString();
-//
-//    }
 
 }
