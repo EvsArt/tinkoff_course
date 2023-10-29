@@ -17,8 +17,6 @@ public interface Field {
 
     void closeAllCells();
 
-    void openAllCells();
-
     void markAllCellsInList(List<Position> positions);
 
 }

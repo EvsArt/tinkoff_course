@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DFSSolver implements Solver {
+
+    Logger logger = LogManager.getLogger();
 
     private final Map<Position, Position> positionToPrevPositionMap = new HashMap<>();
 
@@ -28,6 +32,7 @@ public class DFSSolver implements Solver {
 
         boolean mazeIsSolved = dfs(startCellPos, field, endPos);
         if (!mazeIsSolved) {
+            logger.error("Error in solve() in DFSSolver: Maze is not solvable!");
             throw new MazeIsNotSolvableException("Maze is not solvable!");
         }
 

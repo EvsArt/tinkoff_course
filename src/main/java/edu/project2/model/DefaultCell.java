@@ -6,8 +6,12 @@ import edu.project2.constraints.symbols.Symbols;
 import edu.project2.exceptions.SymbolNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DefaultCell implements Cell {
+
+    Logger logger = LogManager.getLogger();
 
     private Walls walls;
     private boolean isMarked = false;
@@ -73,13 +77,15 @@ public class DefaultCell implements Cell {
             )).findFirst();
 
         if (symbol.isEmpty()) {
-            throw new SymbolNotFoundException(String.format(
+            String msg = String.format(
                 "Symbol with walls left: %b, top: %b, right: %b, bottom: %b not found!",
                 walls.left(),
                 walls.top(),
                 walls.right(),
                 walls.bottom()
-            ));
+            );
+            logger.error("Error in toString() in DefaultCell: " + msg);
+            throw new SymbolNotFoundException(msg);
         }
 
         return symbol.get().getValue();

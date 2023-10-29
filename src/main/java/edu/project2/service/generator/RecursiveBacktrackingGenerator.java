@@ -55,7 +55,7 @@ public class RecursiveBacktrackingGenerator implements Generator {
 
     }
 
-    private List<Neighbor> getUnvisitedNeighboringCells(Field field, Position cellPosition) {
+    protected List<Neighbor> getUnvisitedNeighboringCells(Field field, Position cellPosition) {
 
         List<Neighbor> unvisitedNeighbors = new ArrayList<>(SideEnum.values().length);
         int posX = cellPosition.x();

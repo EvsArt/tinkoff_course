@@ -4,8 +4,12 @@ import edu.project2.constraints.StringConstraints;
 import edu.project2.exceptions.FieldBorderException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DefaultField implements Field {
+
+    Logger logger = LogManager.getLogger();
 
     private final int height;
     private final int width;
@@ -50,28 +54,28 @@ public class DefaultField implements Field {
         switch (side) {
             case LEFT -> {
                 if (pos.x() <= 0) {
-                    throw new FieldBorderException(StringConstraints.attemptToRemovingBorderAt(pos.x(), pos.y(), side));
+                    throwFieldBorderException(pos.x(), pos.y(), side);
                 }
                 field.get(pos.y()).get(pos.x()).changeWay(SideEnum.LEFT, closing);
                 field.get(pos.y()).get(pos.x() - 1).changeWay(SideEnum.RIGHT, closing);
             }
             case TOP -> {
                 if (pos.y() <= 0) {
-                    throw new FieldBorderException(StringConstraints.attemptToRemovingBorderAt(pos.x(), pos.y(), side));
+                    throwFieldBorderException(pos.x(), pos.y(), side);
                 }
                 field.get(pos.y()).get(pos.x()).changeWay(SideEnum.TOP, closing);
                 field.get(pos.y() - 1).get(pos.x()).changeWay(SideEnum.BOTTOM, closing);
             }
             case RIGHT -> {
                 if (pos.x() >= width - 1) {
-                    throw new FieldBorderException(StringConstraints.attemptToRemovingBorderAt(pos.x(), pos.y(), side));
+                    throwFieldBorderException(pos.x(), pos.y(), side);
                 }
                 field.get(pos.y()).get(pos.x()).changeWay(SideEnum.RIGHT, closing);
                 field.get(pos.y()).get(pos.x() + 1).changeWay(SideEnum.LEFT, closing);
             }
             case BOTTOM -> {
                 if (pos.y() >= height - 1) {
-                    throw new FieldBorderException(StringConstraints.attemptToRemovingBorderAt(pos.x(), pos.y(), side));
+                    throwFieldBorderException(pos.x(), pos.y(), side);
                 }
                 field.get(pos.y()).get(pos.x()).changeWay(SideEnum.BOTTOM, closing);
                 field.get(pos.y() + 1).get(pos.x()).changeWay(SideEnum.TOP, closing);
@@ -80,6 +84,12 @@ public class DefaultField implements Field {
             }
         }
 
+    }
+
+    private void throwFieldBorderException(int x, int y, SideEnum side) {
+        String msg = StringConstraints.attemptToRemovingBorderAt(x, y, side);
+        logger.error("Error in changeWay() in DefaultField: " + msg);
+        throw new FieldBorderException(msg);
     }
 
     @Override
@@ -99,25 +109,6 @@ public class DefaultField implements Field {
                     new DefaultCell.DefaultWalls(true, true, true, true)
                 );
             }
-        }
-    }
-
-    @Override
-    public void openAllCells() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                getCell(new Position(x, y)).setWalls(
-                    new DefaultCell.DefaultWalls(false, false, false, false)
-                );
-            }
-        }
-        for (int y = 0; y < height; y++) {
-            getCell(new Position(0, y)).getWalls().setLeft(true);
-            getCell(new Position(width - 1, y)).getWalls().setRight(true);
-        }
-        for (int x = 0; x < width; x++) {
-            getCell(new Position(x, 0)).getWalls().setTop(true);
-            getCell(new Position(x, height - 1)).getWalls().setBottom(true);
         }
     }
 

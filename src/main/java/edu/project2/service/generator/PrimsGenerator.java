@@ -1,5 +1,6 @@
 package edu.project2.service.generator;
 
+import edu.project2.exceptions.CellDoesNotHaveMarkedNeighborsException;
 import edu.project2.model.Cell;
 import edu.project2.model.CellWithPosition;
 import edu.project2.model.Field;
@@ -9,10 +10,13 @@ import edu.project2.model.SideEnum;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PrimsGenerator implements Generator {
 
     Random random = new Random();
+    Logger logger = LogManager.getLogger();
 
     HashSet<Neighbor> potentialNexts = new HashSet<>();
 
@@ -46,7 +50,7 @@ public class PrimsGenerator implements Generator {
 
     }
 
-    private Neighbor getRandomMarkedNeighbor(Field field, CellWithPosition cellPos) {
+    protected Neighbor getRandomMarkedNeighbor(Field field, CellWithPosition cellPos) {
 
         ArrayList<Neighbor> res = new ArrayList<>(SideEnum.values().length);
 
@@ -84,6 +88,10 @@ public class PrimsGenerator implements Generator {
             }
         }
 
+        if (res.size() == 0) {
+            logger.error("Error in getRandomMarkedNeighbor() in PrimsGenerator: Cell doesn't have any marked cells");
+            throw new CellDoesNotHaveMarkedNeighborsException("This Cell doesn't have any marked cells!");
+        }
         return res.get(random.nextInt(res.size()));
 
     }

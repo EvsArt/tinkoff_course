@@ -14,8 +14,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BFSSolver implements Solver {
+
+    Logger logger = LogManager.getLogger();
 
     @Override
     public List<Position> solve(Maze maze, Position startPos, Position endPos) {
@@ -49,6 +53,7 @@ public class BFSSolver implements Solver {
             return solution;
         }
 
+        logger.error("Error in solve() in BFSSolver: Maze is not solvable!");
         throw new MazeIsNotSolvableException("Error: This maze is not solvable!");
 
     }

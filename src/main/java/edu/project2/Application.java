@@ -26,23 +26,26 @@ public class Application {
 
     public void run() {
 
-        logger.info("Please switch line height to minimum for correct output");
-
-        Maze maze1 = new Maze(height, width, generator1);
-        logger.info(maze1);
-
-        Maze maze2 = new Maze(height, width, generator2);
-        logger.info(maze2);
-
         Position startPos = new Position(0, 0);
         Position endPos = new Position(width - 1, height - 1);
 
-        logger.info("BFS Solution: ");
+        logger.info("Please switch line height to minimum for correct output");
+
+        Maze maze1 = new Maze(height, width, generator1);
+        logger.info("RecursiveBacktracking-generated maze:");
+        logger.info(maze1);
+
+        logger.info("BFS Solution of maze 1: ");
         List<Position> solution1 = solver1.solve(maze1, startPos, endPos);
         logger.info(maze1);
         logger.info(Position.positionsListToString(solution1));
 
-        logger.info("DFS Solution: ");
+
+        Maze maze2 = new Maze(height, width, generator2);
+        logger.info("Prims-generated maze");
+        logger.info(maze2);
+
+        logger.info("DFS Solution of maze 2: ");
         List<Position> solution2 = solver2.solve(maze2, startPos, endPos);
         logger.info(maze2);
         logger.info(Position.positionsListToString(solution2));

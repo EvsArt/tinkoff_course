@@ -3,6 +3,7 @@ package edu.project2.model;
 import edu.project2.exceptions.FieldBorderException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -96,6 +97,64 @@ class DefaultFieldTest {
     }
 
     @Test
+    @DisplayName("Test unmarking cells")
+    void unmarkAllCells() {
+
+        int height = 5;
+        int width = 5;
+
+        Position pos1 = new Position(0, 0);
+        Position pos2 = new Position(width - 1, height - 1);
+        Position pos3 = new Position(2, 2);
+
+        DefaultField field = new DefaultField(5, 5);
+        field.getCell(pos1).mark(true);
+        field.getCell(pos2).mark(true);
+        field.getCell(pos3).mark(true);
+
+        field.unmarkAllCells();
+        boolean res =
+            field.getCell(pos1).isMarked()
+                || field.getCell(pos2).isMarked()
+                || field.getCell(pos3).isMarked();
+
+        assertThat(res).isFalse();
+
+    }
+
+    @Test
+    @DisplayName("Test closing all cells")
+    void closeAllCells() {
+
+        int height = 5;
+        int width = 5;
+
+        Position pos1 = new Position(0, 0);
+        Position pos2 = new Position(width - 1, height - 1);
+        Position pos3 = new Position(2, 2);
+
+        DefaultField field = new DefaultField(5, 5);
+        field.getCell(pos1).getWalls().setTop(false);
+        field.getCell(pos1).getWalls().setBottom(false);
+        field.getCell(pos2).getWalls().setRight(false);
+        field.getCell(pos2).getWalls().setTop(false);
+        field.getCell(pos3).getWalls().setRight(false);
+        field.getCell(pos3).getWalls().setLeft(false);
+
+        field.closeAllCells();
+
+        boolean[] closedCell = new boolean[] {true, true, true, true};
+
+        boolean res =
+            Arrays.equals(field.getCell(pos1).getWalls().getWallsAsBoolArray(), closedCell)
+                && Arrays.equals(field.getCell(pos2).getWalls().getWallsAsBoolArray(), closedCell)
+                && Arrays.equals(field.getCell(pos3).getWalls().getWallsAsBoolArray(), closedCell);
+
+        assertThat(res).isTrue();
+
+    }
+
+    @Test
     @DisplayName("Test converting to string")
     void testToString() {
 
@@ -128,14 +187,14 @@ class DefaultFieldTest {
 
         String newFieldString = field.toString();
 
-        field.changeWay(new Position(0,0), SideEnum.RIGHT, false);
-        field.changeWay(new Position(0,0), SideEnum.BOTTOM, false);
-        field.changeWay(new Position(1,0), SideEnum.LEFT, false);
-        field.changeWay(new Position(2,0), SideEnum.LEFT, false);
-        field.changeWay(new Position(2,1), SideEnum.TOP, false);
-        field.changeWay(new Position(2,1), SideEnum.LEFT, false);
-        field.changeWay(new Position(2,1), SideEnum.BOTTOM, false);
-        field.changeWay(new Position(2,1), SideEnum.RIGHT, false);
+        field.changeWay(new Position(0, 0), SideEnum.RIGHT, false);
+        field.changeWay(new Position(0, 0), SideEnum.BOTTOM, false);
+        field.changeWay(new Position(1, 0), SideEnum.LEFT, false);
+        field.changeWay(new Position(2, 0), SideEnum.LEFT, false);
+        field.changeWay(new Position(2, 1), SideEnum.TOP, false);
+        field.changeWay(new Position(2, 1), SideEnum.LEFT, false);
+        field.changeWay(new Position(2, 1), SideEnum.BOTTOM, false);
+        field.changeWay(new Position(2, 1), SideEnum.RIGHT, false);
         field.getCell(new Position(0, 0)).mark(true);
         field.getCell(new Position(1, 2)).mark(true);
         field.getCell(new Position(4, 4)).mark(true);
