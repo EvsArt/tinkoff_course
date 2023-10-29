@@ -5,6 +5,15 @@ public enum SideEnum {
     LEFT,
     TOP,
     RIGHT,
-    BOTTOM
+    BOTTOM;
+
+    public SideEnum getOppositeSide() {
+        return switch (this) {
+            case LEFT -> RIGHT;
+            case TOP -> BOTTOM;
+            case RIGHT -> LEFT;
+            case BOTTOM -> TOP;
+        };
+    }
 
 }

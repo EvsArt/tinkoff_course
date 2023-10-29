@@ -1,9 +1,13 @@
 package edu.project2.service.solver;
 
 import edu.project2.exceptions.MazeIsNotSolvableException;
+import edu.project2.model.Cell;
 import edu.project2.model.CellWithPosition;
+import edu.project2.model.Field;
 import edu.project2.model.Maze;
 import edu.project2.model.Position;
+import edu.project2.model.SideEnum;
+import edu.project2.model.Walls;
 import edu.project2.service.SolutionService;
 import java.util.ArrayList;
 import java.util.HashMap;

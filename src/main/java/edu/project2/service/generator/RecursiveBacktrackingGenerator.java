@@ -3,6 +3,7 @@ package edu.project2.service.generator;
 import edu.project2.model.Cell;
 import edu.project2.model.CellWithPosition;
 import edu.project2.model.Field;
+import edu.project2.model.Neighbor;
 import edu.project2.model.Position;
 import edu.project2.model.SideEnum;
 import java.util.ArrayList;
@@ -31,10 +32,10 @@ public class RecursiveBacktrackingGenerator implements Generator {
             if (!unvisitedNeighbors.isEmpty()) {
                 Neighbor neighbor = unvisitedNeighbors.get(random.nextInt(unvisitedNeighbors.size()));
 
-                field.changeWay(curCellPos.position(), neighbor.side, false);
-                position = curCellPos.position().getNewPosAfterMoving(neighbor.side);
+                field.changeWay(curCellPos.position(), neighbor.side(), false);
+                position = curCellPos.position().getNewPosAfterMoving(neighbor.side());
 
-                var neighborCell = new CellWithPosition(neighbor.cell, position);
+                var neighborCell = new CellWithPosition(neighbor.cell(), position);
                 cellStack.push(neighborCell);
                 curCellPos = neighborCell;
 
@@ -62,35 +63,36 @@ public class RecursiveBacktrackingGenerator implements Generator {
         Cell neighbor;
 
         if (posX > 0) {
-            neighbor = field.getCell(new Position(posX - 1, posY));
+            Position neighborPos = cellPosition.getNewPosAfterMoving(SideEnum.LEFT);
+            neighbor = field.getCell(neighborPos);
             if (!neighbor.isMarked()) {
-                unvisitedNeighbors.add(new Neighbor(SideEnum.LEFT, neighbor));
+                unvisitedNeighbors.add(new Neighbor(SideEnum.LEFT, neighbor, neighborPos));
             }
         }
         if (posX < field.getWidth() - 1) {
-            neighbor = field.getCell(new Position(posX + 1, posY));
+            Position neighborPos = cellPosition.getNewPosAfterMoving(SideEnum.RIGHT);
+            neighbor = field.getCell(neighborPos);
             if (!neighbor.isMarked()) {
-                unvisitedNeighbors.add(new Neighbor(SideEnum.RIGHT, neighbor));
+                unvisitedNeighbors.add(new Neighbor(SideEnum.RIGHT, neighbor, neighborPos));
             }
         }
         if (posY > 0) {
-            neighbor = field.getCell(new Position(posX, posY - 1));
+            Position neighborPos = cellPosition.getNewPosAfterMoving(SideEnum.TOP);
+            neighbor = field.getCell(neighborPos);
             if (!neighbor.isMarked()) {
-                unvisitedNeighbors.add(new Neighbor(SideEnum.TOP, neighbor));
+                unvisitedNeighbors.add(new Neighbor(SideEnum.TOP, neighbor, neighborPos));
             }
         }
         if (posY < field.getHeight() - 1) {
-            neighbor = field.getCell(new Position(posX, posY + 1));
+            Position neighborPos = cellPosition.getNewPosAfterMoving(SideEnum.BOTTOM);
+            neighbor = field.getCell(neighborPos);
             if (!neighbor.isMarked()) {
-                unvisitedNeighbors.add(new Neighbor(SideEnum.BOTTOM, neighbor));
+                unvisitedNeighbors.add(new Neighbor(SideEnum.BOTTOM, neighbor, neighborPos));
             }
         }
 
         return unvisitedNeighbors;
 
-    }
-
-    private record Neighbor(SideEnum side, Cell cell) {
     }
 
 }

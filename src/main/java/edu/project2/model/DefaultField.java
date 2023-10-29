@@ -29,6 +29,7 @@ public class DefaultField implements Field {
         return field;
     }
 
+    @Override
     public Cell getCell(Position pos) {
         return field.get(pos.y()).get(pos.x());
     }
@@ -81,6 +82,7 @@ public class DefaultField implements Field {
 
     }
 
+    @Override
     public void unmarkAllCells() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -89,6 +91,7 @@ public class DefaultField implements Field {
         }
     }
 
+    @Override
     public void closeAllCells() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -96,6 +99,25 @@ public class DefaultField implements Field {
                     new DefaultCell.DefaultWalls(true, true, true, true)
                 );
             }
+        }
+    }
+
+    @Override
+    public void openAllCells() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                getCell(new Position(x, y)).setWalls(
+                    new DefaultCell.DefaultWalls(false, false, false, false)
+                );
+            }
+        }
+        for (int y = 0; y < height; y++) {
+            getCell(new Position(0, y)).getWalls().setLeft(true);
+            getCell(new Position(width - 1, y)).getWalls().setRight(true);
+        }
+        for (int x = 0; x < width; x++) {
+            getCell(new Position(x, 0)).getWalls().setTop(true);
+            getCell(new Position(x, height - 1)).getWalls().setBottom(true);
         }
     }
 
