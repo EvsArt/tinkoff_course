@@ -1,9 +1,14 @@
 package edu.hw4;
 
-import org.jetbrains.annotations.Nullable;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.jetbrains.annotations.Nullable;
 
 public class Main {
 
@@ -160,6 +165,8 @@ public class Main {
             .collect(Collectors.toList());
     }
 
+    private static final int HEIGHT = 100;
+
     // Task 11
     public List<Animal> getAnimalsThatCanBiteAndHasHeightMore100(List<Animal> list) {
         if (list == null || list.isEmpty() || list.stream().allMatch(Objects::isNull)) {
@@ -169,7 +176,7 @@ public class Main {
             .stream()
             .filter(Objects::nonNull)
             .filter(Animal::bites)
-            .filter(it -> it.height() > 100)
+            .filter(it -> it.height() > HEIGHT)
             .collect(Collectors.toList());
     }
 
@@ -294,7 +301,7 @@ public class Main {
             .filter(Objects::nonNull)
             .filter(
                 it -> it.type() != null
-                && it.type().equals(Animal.Type.FISH)
+                    && it.type().equals(Animal.Type.FISH)
             )
             .max(Comparator.comparingInt(Animal::weight))
             .orElse(null);

@@ -1,7 +1,6 @@
 package edu.hw4;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -45,7 +44,7 @@ public enum ValidationError {
         this.isError = isError;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return msg;
     }
 
