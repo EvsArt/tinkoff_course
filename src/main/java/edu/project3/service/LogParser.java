@@ -24,14 +24,14 @@ public class LogParser {
         return res;
     }
 
-    public Stream<LogInfo> getLogsStream(Path path) throws IOException {
+    private Stream<LogInfo> getLogsStream(Path path) throws IOException {
         return Files.lines(path)
             .map(this::parseLine)
             .filter(Objects::nonNull);
     }
 
     @SuppressWarnings("MagicNumber")
-    protected LogInfo parseLine(String line) {
+    private LogInfo parseLine(String line) {
         LogInfo res = null;
         Pattern nginxLogFormat = Pattern.compile(
             "^([\\\\.\\d]+)"
