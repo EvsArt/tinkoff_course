@@ -11,19 +11,15 @@ import static java.time.DayOfWeek.FRIDAY;
 
 public class Task2 {
 
-    private static final int NEEDEDDAYOFMONTH = 13;
+    private static final int NEEDED_DAY_OF_MONTH = 13;
 
     public List<LocalDate> getAllFridays13(int year) {
 
-        LocalDate startDate = LocalDate.of(year, 1, NEEDEDDAYOFMONTH);
+        LocalDate startDate = LocalDate.of(year, 1, NEEDED_DAY_OF_MONTH);
 
         return startDate
-            .datesUntil(
-                startDate.plusYears(1), Period.ofMonths(1)
-            )
-            .filter(
-                date -> date.getDayOfWeek().equals(FRIDAY)
-            )
+            .datesUntil(startDate.plusYears(1), Period.ofMonths(1))
+            .filter(date -> date.getDayOfWeek().equals(FRIDAY))
             .toList();
 
     }
@@ -38,7 +34,7 @@ public class Task2 {
             );
             do {
                 res = res.with(TemporalAdjusters.next(FRIDAY));
-            } while (!(res.get(ChronoField.DAY_OF_MONTH) == (NEEDEDDAYOFMONTH)));
+            } while (!(res.get(ChronoField.DAY_OF_MONTH) == (NEEDED_DAY_OF_MONTH)));
             return res;
         };
 

@@ -17,11 +17,17 @@ class Task8Test {
         String inp4 = "0";
         String inp5 = "";
 
-        assertThat(task8.isEvenLength(inp1)).isTrue();
-        assertThat(task8.isEvenLength(inp2)).isFalse();
-        assertThat(task8.isEvenLength(inp3)).isTrue();
-        assertThat(task8.isEvenLength(inp4)).isFalse();
-        assertThat(task8.isEvenLength(inp5)).isTrue();
+        var res1 = task8.isEvenLength(inp1);
+        var res2 = task8.isEvenLength(inp2);
+        var res3 = task8.isEvenLength(inp3);
+        var res4 = task8.isEvenLength(inp4);
+        var res5 = task8.isEvenLength(inp5);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isFalse();
+        assertThat(res3).isTrue();
+        assertThat(res4).isFalse();
+        assertThat(res5).isTrue();
 
         assertThrows(NullPointerException.class, () -> task8.isEvenLength(null));
         assertThrows(IllegalArgumentException.class, () -> task8.isEvenLength("010s1"));
@@ -37,11 +43,17 @@ class Task8Test {
         String inp4 = "001";
         String inp5 = "";
 
-        assertThat(task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp1)).isTrue();
-        assertThat(task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp2)).isFalse();
-        assertThat(task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp3)).isFalse();
-        assertThat(task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp4)).isTrue();
-        assertThat(task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp5)).isFalse();
+        var res1 = task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp1);
+        var res2 = task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp2);
+        var res3 = task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp3);
+        var res4 = task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp4);
+        var res5 = task8.isStartsWith0AndNotEvenLengthOrStartsWith1AndEvenLength(inp5);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isFalse();
+        assertThat(res3).isFalse();
+        assertThat(res4).isTrue();
+        assertThat(res5).isFalse();
 
         assertThrows(
             NullPointerException.class,
@@ -63,11 +75,17 @@ class Task8Test {
         String inp4 = "000";
         String inp5 = "";
 
-        assertThat(task8.countOfZerosIsEquals3(inp1)).isFalse();
-        assertThat(task8.countOfZerosIsEquals3(inp2)).isTrue();
-        assertThat(task8.countOfZerosIsEquals3(inp3)).isFalse();
-        assertThat(task8.countOfZerosIsEquals3(inp4)).isTrue();
-        assertThat(task8.countOfZerosIsEquals3(inp5)).isFalse();
+        var res1 = task8.countOfZerosIsEquals3(inp1);
+        var res2 = task8.countOfZerosIsEquals3(inp2);
+        var res3 = task8.countOfZerosIsEquals3(inp3);
+        var res4 = task8.countOfZerosIsEquals3(inp4);
+        var res5 = task8.countOfZerosIsEquals3(inp5);
+
+        assertThat(res1).isFalse();
+        assertThat(res2).isTrue();
+        assertThat(res3).isFalse();
+        assertThat(res4).isTrue();
+        assertThat(res5).isFalse();
 
         assertThrows(NullPointerException.class, () -> task8.countOfZerosIsEquals3(null));
         assertThrows(IllegalArgumentException.class, () -> task8.countOfZerosIsEquals3("010s1"));
@@ -83,11 +101,17 @@ class Task8Test {
         String inp4 = "111";
         String inp5 = "";
 
-        assertThat(task8.isNot11Or111(inp1)).isTrue();
-        assertThat(task8.isNot11Or111(inp2)).isTrue();
-        assertThat(task8.isNot11Or111(inp3)).isFalse();
-        assertThat(task8.isNot11Or111(inp4)).isFalse();
-        assertThat(task8.isNot11Or111(inp5)).isTrue();
+        var res1 = task8.isNot11Or111(inp1);
+        var res2 = task8.isNot11Or111(inp2);
+        var res3 = task8.isNot11Or111(inp3);
+        var res4 = task8.isNot11Or111(inp4);
+        var res5 = task8.isNot11Or111(inp5);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isTrue();
+        assertThat(res3).isFalse();
+        assertThat(res4).isFalse();
+        assertThat(res5).isTrue();
 
         assertThrows(NullPointerException.class, () -> task8.isNot11Or111(null));
         assertThrows(IllegalArgumentException.class, () -> task8.isNot11Or111("010s1"));
@@ -105,13 +129,21 @@ class Task8Test {
         String inp6 = "011";
         String inp7 = "0111";
 
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp1)).isTrue();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp2)).isTrue();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp3)).isTrue();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp4)).isFalse();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp5)).isFalse();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp6)).isFalse();
-        assertThat(task8.isEveryNotEvenSymbolIs1(inp7)).isFalse();
+        var res1 = task8.isEveryNotEvenSymbolIs1(inp1);
+        var res2 = task8.isEveryNotEvenSymbolIs1(inp2);
+        var res3 = task8.isEveryNotEvenSymbolIs1(inp3);
+        var res4 = task8.isEveryNotEvenSymbolIs1(inp4);
+        var res5 = task8.isEveryNotEvenSymbolIs1(inp5);
+        var res6 = task8.isEveryNotEvenSymbolIs1(inp6);
+        var res7 = task8.isEveryNotEvenSymbolIs1(inp7);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isTrue();
+        assertThat(res3).isTrue();
+        assertThat(res4).isFalse();
+        assertThat(res5).isFalse();
+        assertThat(res6).isFalse();
+        assertThat(res7).isFalse();
 
         assertThrows(NullPointerException.class, () -> task8.isEveryNotEvenSymbolIs1(null));
         assertThrows(IllegalArgumentException.class, () -> task8.isEveryNotEvenSymbolIs1("010s1"));
@@ -128,12 +160,19 @@ class Task8Test {
         String inp5 = "11";
         String inp6 = "10";
 
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp1)).isTrue();
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp2)).isTrue();
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp3)).isTrue();
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp4)).isTrue();
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp5)).isFalse();
-        assertThat(task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp6)).isFalse();
+        var res1 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp1);
+        var res2 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp2);
+        var res3 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp3);
+        var res4 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp4);
+        var res5 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp5);
+        var res6 = task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(inp6);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isTrue();
+        assertThat(res3).isTrue();
+        assertThat(res4).isTrue();
+        assertThat(res5).isFalse();
+        assertThat(res6).isFalse();
 
         assertThrows(NullPointerException.class, () -> task8.containsNotLessThan2ZerosAndNotMoreThan1Ones(null));
         assertThrows(IllegalArgumentException.class, () -> task8.containsNotLessThan2ZerosAndNotMoreThan1Ones("010s1"));
@@ -150,12 +189,19 @@ class Task8Test {
         String inp5 = "00100110";
         String inp6 = "";
 
-        assertThat(task8.notHaveSerialOnes(inp1)).isTrue();
-        assertThat(task8.notHaveSerialOnes(inp2)).isFalse();
-        assertThat(task8.notHaveSerialOnes(inp3)).isFalse();
-        assertThat(task8.notHaveSerialOnes(inp4)).isTrue();
-        assertThat(task8.notHaveSerialOnes(inp5)).isFalse();
-        assertThat(task8.notHaveSerialOnes(inp6)).isTrue();
+        var res1 = task8.notHaveSerialOnes(inp1);
+        var res2 = task8.notHaveSerialOnes(inp2);
+        var res3 = task8.notHaveSerialOnes(inp3);
+        var res4 = task8.notHaveSerialOnes(inp4);
+        var res5 = task8.notHaveSerialOnes(inp5);
+        var res6 = task8.notHaveSerialOnes(inp6);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isFalse();
+        assertThat(res3).isFalse();
+        assertThat(res4).isTrue();
+        assertThat(res5).isFalse();
+        assertThat(res6).isTrue();
 
         assertThrows(NullPointerException.class, () -> task8.notHaveSerialOnes(null));
         assertThrows(IllegalArgumentException.class, () -> task8.notHaveSerialOnes("010s1"));

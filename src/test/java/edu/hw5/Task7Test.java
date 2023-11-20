@@ -19,10 +19,15 @@ class Task7Test {
         String inp3 = "11111";
         String inp4 = "00";
 
-        assertThat(task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp1)).isTrue();
-        assertThat(task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp2)).isTrue();
-        assertThat(task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp3)).isFalse();
-        assertThat(task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp4)).isFalse();
+        var res1 = task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp1);
+        var res2 = task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp2);
+        var res3 = task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp3);
+        var res4 = task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(inp4);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isTrue();
+        assertThat(res3).isFalse();
+        assertThat(res4).isFalse();
 
         assertThrows(NullPointerException.class, () -> task7.hasNotLessThan3SymbolsAnd3dSymbolIs0(null));
         assertThrows(IllegalArgumentException.class, () -> task7.hasNotLessThan3SymbolsAnd3dSymbolIs0("010s1"));
@@ -39,11 +44,17 @@ class Task7Test {
         String inp4 = "0";
         String inp5 = "1";
 
-        assertThat(task7.isStartAndEndWithSimilarSymbols(inp1)).isTrue();
-        assertThat(task7.isStartAndEndWithSimilarSymbols(inp2)).isFalse();
-        assertThat(task7.isStartAndEndWithSimilarSymbols(inp3)).isTrue();
-        assertThat(task7.isStartAndEndWithSimilarSymbols(inp4)).isTrue();
-        assertThat(task7.isStartAndEndWithSimilarSymbols(inp5)).isTrue();
+        var res1 = task7.isStartAndEndWithSimilarSymbols(inp1);
+        var res2 = task7.isStartAndEndWithSimilarSymbols(inp2);
+        var res3 = task7.isStartAndEndWithSimilarSymbols(inp3);
+        var res4 = task7.isStartAndEndWithSimilarSymbols(inp4);
+        var res5 = task7.isStartAndEndWithSimilarSymbols(inp5);
+
+        assertThat(res1).isTrue();
+        assertThat(res2).isFalse();
+        assertThat(res3).isTrue();
+        assertThat(res4).isTrue();
+        assertThat(res5).isTrue();
 
         assertThrows(NullPointerException.class, () -> task7.isStartAndEndWithSimilarSymbols(null));
         assertThrows(IllegalArgumentException.class, () -> task7.isStartAndEndWithSimilarSymbols("010s1"));
@@ -60,11 +71,18 @@ class Task7Test {
         String inp4 = "0";
         String inp5 = "";
 
-        assertThat(task7.hasLengthNotLess1AndNotMore3(inp1)).isFalse();
-        assertThat(task7.hasLengthNotLess1AndNotMore3(inp2)).isTrue();
-        assertThat(task7.hasLengthNotLess1AndNotMore3(inp3)).isTrue();
-        assertThat(task7.hasLengthNotLess1AndNotMore3(inp4)).isTrue();
-        assertThat(task7.hasLengthNotLess1AndNotMore3(inp5)).isFalse();
+        var res1 = task7.hasLengthNotLess1AndNotMore3(inp1);
+        var res2 = task7.hasLengthNotLess1AndNotMore3(inp2);
+        var res3 = task7.hasLengthNotLess1AndNotMore3(inp3);
+        var res4 = task7.hasLengthNotLess1AndNotMore3(inp4);
+        var res5 = task7.hasLengthNotLess1AndNotMore3(inp5);
+
+
+        assertThat(res1).isFalse();
+        assertThat(res2).isTrue();
+        assertThat(res3).isTrue();
+        assertThat(res4).isTrue();
+        assertThat(res5).isFalse();
 
         assertThrows(NullPointerException.class, () -> task7.hasLengthNotLess1AndNotMore3(null));
         assertThrows(IllegalArgumentException.class, () -> task7.hasLengthNotLess1AndNotMore3("010s1"));

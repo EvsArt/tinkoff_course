@@ -9,16 +9,17 @@ import java.util.stream.Collectors;
 
 public class Task1 {
 
-    private final int secondsInHour = 3600;
-    private final int secondsInMinute = 60;
+    private static final int SECONDS_IN_HOUR = 3600;
+    private static final int SECONDS_IN_MINUTE = 60;
 
     public String getAverageTime(String timeSections) {
 
         List<Duration> durations = getDurationsByTimeSections(timeSections);
         Duration averageDuration = getAverageDuration(durations);
+        long hours = averageDuration.getSeconds() / SECONDS_IN_HOUR;
+        long minutes = averageDuration.getSeconds() / SECONDS_IN_MINUTE % SECONDS_IN_MINUTE;
 
-        return averageDuration.getSeconds() / secondsInHour + "ч. "
-            + averageDuration.getSeconds() / secondsInMinute % secondsInMinute + "м.";
+        return String.format("%dч. %dм.", hours, minutes);
     }
 
     public List<Duration> getDurationsByTimeSections(String timeSections) {

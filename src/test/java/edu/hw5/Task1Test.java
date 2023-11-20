@@ -20,11 +20,11 @@ class Task1Test {
             "2022-03-12, 20:00 - 2022-03-12, 20:00\n" +
                 "2022-03-12, 20:00 - 2022-03-13, 20:00";
 
-        String expRes1 = "3ч. 40м.";
-        String expRes2 = "12ч. 0м.";
-
         String res1 = task1.getAverageTime(input1);
         String res2 = task1.getAverageTime(input2);
+
+        String expRes1 = "3ч. 40м.";
+        String expRes2 = "12ч. 0м.";
 
         assertThat(res1).isEqualTo(expRes1);
         assertThat(res2).isEqualTo(expRes2);
@@ -37,10 +37,10 @@ class Task1Test {
         String emptyInput = "";
         String nullInput = null;
 
-        String expRes = "0ч. 0м.";
-
         String res1 = task1.getAverageTime(emptyInput);
         String res2 = task1.getAverageTime(nullInput);
+
+        String expRes = "0ч. 0м.";
 
         assertThat(res1).isEqualTo(expRes);
         assertThat(res2).isEqualTo(expRes);
@@ -56,13 +56,14 @@ class Task1Test {
                 2022-04-01, 21:30 - 2022-04-02, 01:20
                 2022-04-01, 21:59 - 2022-04-01, 22:00
                 """;
+
+        List<Duration> res = task1.getDurationsByTimeSections(input);
+
         List<Duration> expRes = List.of(
             Duration.ofHours(3).plusMinutes(30),
             Duration.ofHours(3).plusMinutes(50),
             Duration.ofMinutes(1)
         );
-
-        List<Duration> res = task1.getDurationsByTimeSections(input);
 
         assertThat(res).isEqualTo(expRes);
     }
@@ -76,13 +77,13 @@ class Task1Test {
         String emptyInput = "";
         String nullInput = null;
 
-        List<Duration> emptyListRes = List.of();
-
         List<Duration> res1 = task1.getDurationsByTimeSections(wrongTimeSectionInput);
         List<Duration> res2 = task1.getDurationsByTimeSections(wrongTimeFormatInput1);
         List<Duration> res3 = task1.getDurationsByTimeSections(wrongTimeFormatInput2);
         List<Duration> res4 = task1.getDurationsByTimeSections(emptyInput);
         List<Duration> res5 = task1.getDurationsByTimeSections(nullInput);
+
+        List<Duration> emptyListRes = List.of();
 
         Stream.of(res1, res2, res3, res4, res5)
             .forEach(it -> assertThat(it).isEqualTo(emptyListRes));
@@ -100,6 +101,7 @@ class Task1Test {
         );
 
         Duration res = task1.getAverageDuration(durations);
+
         Duration expRes = Duration.ofHours(7).plusMinutes(30);
 
         assertThat(res).isEqualTo(expRes);
@@ -112,10 +114,10 @@ class Task1Test {
         List<Duration> durations = List.of();
         List<Duration> durationsNull = null;
 
-        Duration expRes = Duration.ZERO;
-
         Duration res = task1.getAverageDuration(durations);
         Duration resNull = task1.getAverageDuration(durationsNull);
+
+        Duration expRes = Duration.ZERO;
 
         assertThat(res).isEqualTo(expRes);
         assertThat(resNull).isEqualTo(expRes);
