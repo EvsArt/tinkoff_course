@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class SolutionService {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    static Logger log = LogManager.getLogger();
 
     private SolutionService() {
     }
@@ -31,7 +31,7 @@ public final class SolutionService {
             newPosition = posToPrevPosMap.get(prevPosition);
             if (newPosition == null) {
                 String msg = "Positions map is wrong, so it's impossible to restore a solution!";
-                LOGGER.error("Error in restoreSolution() in SolutionService: " + msg);
+                log.error("Error in restoreSolution() in SolutionService: " + msg);
                 throw new WrongPositionsMapException(msg);
             }
             prevPosition = newPosition;

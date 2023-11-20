@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class DFSSolver implements Solver {
 
-    Logger logger = LogManager.getLogger();
+    Logger log = LogManager.getLogger();
 
     private final Map<Position, Position> positionToPrevPositionMap = new HashMap<>();
 
@@ -32,7 +32,7 @@ public class DFSSolver implements Solver {
 
         boolean mazeIsSolved = dfs(startCellPos, field, endPos);
         if (!mazeIsSolved) {
-            logger.error("Error in solve() in DFSSolver: Maze is not solvable!");
+            log.error("Error in solve() in DFSSolver: Maze is not solvable!");
             throw new MazeIsNotSolvableException("Maze is not solvable!");
         }
 

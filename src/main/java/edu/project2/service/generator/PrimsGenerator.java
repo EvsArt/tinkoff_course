@@ -15,9 +15,8 @@ import org.apache.logging.log4j.Logger;
 
 public class PrimsGenerator implements Generator {
 
+    Logger log = LogManager.getLogger();
     Random random = new Random();
-    Logger logger = LogManager.getLogger();
-
     HashSet<Neighbor> potentialNexts = new HashSet<>();
 
     @Override
@@ -88,8 +87,8 @@ public class PrimsGenerator implements Generator {
             }
         }
 
-        if (res.size() == 0) {
-            logger.error("Error in getRandomMarkedNeighbor() in PrimsGenerator: Cell doesn't have any marked cells");
+        if (res.isEmpty()) {
+            log.error("Error in getRandomMarkedNeighbor() in PrimsGenerator: Cell doesn't have any marked cells");
             throw new CellDoesNotHaveMarkedNeighborsException("This Cell doesn't have any marked cells!");
         }
         return res.get(random.nextInt(res.size()));

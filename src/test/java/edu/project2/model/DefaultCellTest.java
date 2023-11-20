@@ -16,10 +16,15 @@ class DefaultCellTest {
 
         DefaultCell cell = DefaultCell.getClosedCell();
 
-        assertThat(cell.getWalls().left()).isTrue();
-        assertThat(cell.getWalls().top()).isTrue();
-        assertThat(cell.getWalls().right()).isTrue();
-        assertThat(cell.getWalls().bottom()).isTrue();
+        var isLeftClosed = cell.getWalls().left();
+        var isTopClosed = cell.getWalls().top();
+        var isRightClosed = cell.getWalls().right();
+        var isBottomClosed = cell.getWalls().bottom();
+
+        assertThat(isLeftClosed).isTrue();
+        assertThat(isTopClosed).isTrue();
+        assertThat(isRightClosed).isTrue();
+        assertThat(isBottomClosed).isTrue();
 
     }
 
@@ -32,10 +37,15 @@ class DefaultCellTest {
         cell.changeWay(SideEnum.LEFT, false);
         cell.changeWay(SideEnum.RIGHT, false);
 
-        assertThat(cell.getWalls().left()).isFalse();
-        assertThat(cell.getWalls().top()).isTrue();
-        assertThat(cell.getWalls().right()).isFalse();
-        assertThat(cell.getWalls().bottom()).isTrue();
+        var isLeftClosed = cell.getWalls().left();
+        var isTopClosed = cell.getWalls().top();
+        var isRightClosed = cell.getWalls().right();
+        var isBottomClosed = cell.getWalls().bottom();
+
+        assertThat(isLeftClosed).isFalse();
+        assertThat(isTopClosed).isTrue();
+        assertThat(isRightClosed).isFalse();
+        assertThat(isBottomClosed).isTrue();
     }
 
     @Test

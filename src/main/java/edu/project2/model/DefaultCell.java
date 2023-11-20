@@ -29,14 +29,13 @@ public class DefaultCell implements Cell {
     }
 
     @Override
+    @SuppressWarnings("MissingSwitchDefault")
     public void changeWay(SideEnum side, boolean closing) {
         switch (side) {
             case LEFT -> walls.setLeft(closing);
             case TOP -> walls.setTop(closing);
             case RIGHT -> walls.setRight(closing);
             case BOTTOM -> walls.setBottom(closing);
-            default -> {
-            }
         }
     }
 

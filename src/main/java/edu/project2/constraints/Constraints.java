@@ -5,9 +5,9 @@ public final class Constraints {
     private Constraints() {
     }
 
-    public static final int MAZEHEGHT = 70;
-    public static final int MAZEWIDTH = 50;
+    public static final int MAZE_HEIGHT = 70;
+    public static final int MAZE_WIDTH = 50;
 
-    public static final int POSITIONSCOUNTINEACHOUTPUTLINE = 7;
+    public static final int POSITIONS_COUNT_IN_EACH_OUTPUT_LINE = 7;
 
 }

@@ -15,7 +15,7 @@ public record Position(int x, int y) {
             builder.append(
                 String.format("-> (x: %s, y: %s) ", pos.x(), pos.y())
             );
-            if (++counter == Constraints.POSITIONSCOUNTINEACHOUTPUTLINE) {
+            if (++counter == Constraints.POSITIONS_COUNT_IN_EACH_OUTPUT_LINE) {
                 builder.append("\n");
                 counter = 0;
             }

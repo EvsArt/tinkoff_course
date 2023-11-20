@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class BFSSolver implements Solver {
 
-    Logger logger = LogManager.getLogger();
+    Logger log = LogManager.getLogger();
 
     @Override
     public List<Position> solve(Maze maze, Position startPos, Position endPos) {
@@ -53,7 +53,7 @@ public class BFSSolver implements Solver {
             return solution;
         }
 
-        logger.error("Error in solve() in BFSSolver: Maze is not solvable!");
+        log.error("Error in solve() in BFSSolver: Maze is not solvable!");
         throw new MazeIsNotSolvableException("Error: This maze is not solvable!");
 
     }

@@ -18,16 +18,22 @@ class DefaultFieldTest {
         int width = 3;
 
         DefaultField field = new DefaultField(height, width);
+        int size = field.getField().size();
 
-        assertThat(field.getField().size()).isEqualTo(height);
+        assertThat(size).isEqualTo(height);
         for (int i = 0; i < height; i++) {
             assertThat(field.getField().get(i).size()).isEqualTo(width);
             for (int j = 0; j < width; j++) {
                 DefaultCell cell = (DefaultCell) field.getCell(new Position(j, i));
-                assertThat(cell.getWalls().bottom()).isTrue();
-                assertThat(cell.getWalls().right()).isTrue();
-                assertThat(cell.getWalls().left()).isTrue();
-                assertThat(cell.getWalls().top()).isTrue();
+                var isLeftClosed = cell.getWalls().left();
+                var isTopClosed = cell.getWalls().top();
+                var isRightClosed = cell.getWalls().right();
+                var isBottomClosed = cell.getWalls().bottom();
+
+                assertThat(isLeftClosed).isTrue();
+                assertThat(isTopClosed).isTrue();
+                assertThat(isRightClosed).isTrue();
+                assertThat(isBottomClosed).isTrue();
             }
         }
 
@@ -38,12 +44,13 @@ class DefaultFieldTest {
     void changeWay() {
 
         DefaultField field = new DefaultField(3, 3);
+        DefaultCell cell;
+
         field.changeWay(new Position(1, 1), SideEnum.LEFT, false);
         field.changeWay(new Position(1, 1), SideEnum.RIGHT, false);
         field.changeWay(new Position(1, 1), SideEnum.TOP, false);
         field.changeWay(new Position(1, 1), SideEnum.BOTTOM, false);
 
-        DefaultCell cell;
 
         cell = (DefaultCell) field.getCell(new Position(1, 1));    // center
         assertThat(cell.getWalls().top()).isFalse();
@@ -103,18 +110,18 @@ class DefaultFieldTest {
         int height = 5;
         int width = 5;
 
+        DefaultField field = new DefaultField(height, width);
+
         Position pos1 = new Position(0, 0);
         Position pos2 = new Position(width - 1, height - 1);
         Position pos3 = new Position(2, 2);
 
-        DefaultField field = new DefaultField(5, 5);
         field.getCell(pos1).mark(true);
         field.getCell(pos2).mark(true);
         field.getCell(pos3).mark(true);
 
         field.unmarkAllCells();
-        boolean res =
-            field.getCell(pos1).isMarked()
+        boolean res = field.getCell(pos1).isMarked()
                 || field.getCell(pos2).isMarked()
                 || field.getCell(pos3).isMarked();
 
@@ -128,12 +135,11 @@ class DefaultFieldTest {
 
         int height = 5;
         int width = 5;
-
+        DefaultField field = new DefaultField(height, width);
         Position pos1 = new Position(0, 0);
         Position pos2 = new Position(width - 1, height - 1);
         Position pos3 = new Position(2, 2);
 
-        DefaultField field = new DefaultField(5, 5);
         field.getCell(pos1).getWalls().setTop(false);
         field.getCell(pos1).getWalls().setBottom(false);
         field.getCell(pos2).getWalls().setRight(false);

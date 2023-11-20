@@ -49,6 +49,7 @@ public class DefaultField implements Field {
     }
 
     @Override
+    @SuppressWarnings("MissingSwitchDefault")
     public void changeWay(Position pos, SideEnum side, boolean closing) throws FieldBorderException {
 
         switch (side) {
@@ -79,8 +80,6 @@ public class DefaultField implements Field {
                 }
                 field.get(pos.y()).get(pos.x()).changeWay(SideEnum.BOTTOM, closing);
                 field.get(pos.y() + 1).get(pos.x()).changeWay(SideEnum.TOP, closing);
-            }
-            default -> {
             }
         }
 
