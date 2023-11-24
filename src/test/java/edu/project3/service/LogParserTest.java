@@ -28,7 +28,8 @@ class LogParserTest {
 
     @BeforeAll
     static void createLogFiles() throws IOException, InterruptedException {
-        removeFiles();
+        Files.createDirectories(LOGS_PATH);
+        clearFiles();
 
         Path tmpLogFile = Files.createFile(LOGS_PATH.resolve("tmpFile.log"));
 
@@ -47,7 +48,7 @@ class LogParserTest {
     }
 
     @AfterAll
-    static void removeFiles() throws IOException {
+    static void clearFiles() throws IOException {
         Files.walk(PARENT_PATH)
             .filter(Files::isRegularFile)
             .forEach(it -> {
