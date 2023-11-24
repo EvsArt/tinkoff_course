@@ -15,7 +15,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.BasicConfigurator;
 
+@Slf4j
 public class Application {
 
     private final StartDirectoriesCreator creator = new StartDirectoriesCreator();
@@ -27,17 +30,20 @@ public class Application {
     private final ReportFileService reportFileService = new ReportFileService();
 
     public void run(String[] args) {
+        BasicConfigurator.configure();  // config for log4j
 
+        List<Path> logFilesList = List.of();
         try {
             creator.createDirectories();
             Arguments parsedArgs = argumentsService.getArgumentsMap(args);
-            List<Path> logFilesList = sourceService.getLogFilesBySources(parsedArgs.paths());
+            logFilesList = sourceService.getLogFilesBySources(parsedArgs.paths());
             Stream<LogInfo> logsStream = logParser.getLogsStream(logFilesList);
             Stream<LogInfo> filteredLogsStream = filterService.useTimeArgsForStream(logsStream, parsedArgs);
             LogReport report = logReportService.createLogReport(parsedArgs.paths(), filteredLogsStream);
             List<ReportTable> tables = logReportService.createTables(report);
             reportFileService.createDocument(parsedArgs.format(), tables);
         } catch (IOException e) {
+            log.error(String.format("Error with getting logs from one of the files: %s", logFilesList));
             throw new RuntimeException(e);
         }
 

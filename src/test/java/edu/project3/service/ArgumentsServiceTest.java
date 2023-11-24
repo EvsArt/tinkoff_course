@@ -1,12 +1,9 @@
 package edu.project3.service;
 
 import edu.project3.pojo.Arguments;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-import java.util.Map;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ArgumentsServiceTest {
 
@@ -15,11 +12,17 @@ class ArgumentsServiceTest {
     @Test
     void getArgumentsMap() {
 
-        String[] args = new String[]{"aaa", "fff", "--path", "aasd", "addda", "--format", "md", "aaa"};
+        String[] args = new String[] {"aaa", "fff", "--path", "aasd", "addda", "--format", "md", "aaa"};
         Arguments arguments = service.getArgumentsMap(args);
 
-        assertThat(arguments.paths().containsAll(List.of("aasd", "addda"))).isTrue();
-        assertThat(arguments.format()).isEqualTo("md");
+        List<String> pathList = arguments.paths();
+        String format = arguments.format();
+
+        List<String> expPathList = List.of("aasd", "addda");
+        String expFormat = "md";
+
+        assertEquals(pathList, expPathList);
+        assertEquals(format, expFormat);
 
     }
 }

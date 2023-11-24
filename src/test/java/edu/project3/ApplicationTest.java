@@ -1,8 +1,7 @@
 package edu.project3;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ApplicationTest {
 
@@ -10,8 +9,10 @@ class ApplicationTest {
 
     @Test
     void run() {
-        application.run(new String[]{"--path",
-            "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs",
-            "--from", "2003-08-11", "--format", "markdown"});
+        assertDoesNotThrow(() ->
+            application.run(new String[] {"--path",
+                "https://raw.githubusercontent.com/elastic/examples/master/Common%20Data%20Formats/nginx_logs/nginx_logs",
+                "--from", "2003-08-11", "--format", "markdown"})
+        );
     }
 }

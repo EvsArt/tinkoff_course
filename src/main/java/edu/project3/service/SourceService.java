@@ -15,12 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SourceService {
-
-    private final Logger logger = LogManager.getLogger();
 
     private final Duration timeOutDuration = Duration.ofSeconds(10);
 
@@ -28,7 +26,7 @@ public class SourceService {
         try {
             Files.createDirectories(Constants.localStoragePath);
         } catch (IOException e) {
-            logger.error("Error with creating local storage directory!");
+            log.error("Error with creating local storage directory!");
             throw new RuntimeException(e);
         }
     }
@@ -39,7 +37,7 @@ public class SourceService {
             try {
                 res.addAll(getLogFilesBySource(it));
             } catch (URISyntaxException | IOException e) {
-                logger.error("Error with getting logs from file " + it);
+                log.error(String.format("Error with getting logs from file %s", it));
                 throw new RuntimeException(e);
             }
         });
@@ -74,7 +72,7 @@ public class SourceService {
             HttpClient.newHttpClient()
                 .send(request, HttpResponse.BodyHandlers.ofFile(localCopy));
         } catch (IOException | InterruptedException e) {
-            logger.error("Error with sending request to the server");
+            log.error("Error with sending request to the server");
             throw new RuntimeException(e);
         }
 

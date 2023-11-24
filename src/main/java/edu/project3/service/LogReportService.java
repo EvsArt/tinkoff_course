@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class LogReportService {
 
-    private final int topCount = 3;
+    private final static int TOP_COUNT = 3;
 
     public LogReport createLogReport(List<String> sources, Stream<LogInfo> logsStream) {
 
@@ -64,17 +64,17 @@ public class LogReportService {
 
             topRequestedResources.entrySet().stream()
                 .sorted(Comparator.comparingInt((Map.Entry<String, Long> it) -> it.getValue().intValue()).reversed())
-                .limit(topCount)
+                .limit(TOP_COUNT)
                 .toList(),
 
             topResponseCodes.entrySet().stream()
                 .sorted(Comparator.comparingInt((Map.Entry<Integer, Long> it) -> it.getValue().intValue()).reversed())
-                .limit(topCount)
+                .limit(TOP_COUNT)
                 .toList(),
 
             topUsers.entrySet().stream()
                 .sorted(Comparator.comparingInt((Map.Entry<String, Long> it) -> it.getValue().intValue()).reversed())
-                .limit(topCount)
+                .limit(TOP_COUNT)
                 .toList(),
 
             topTimeSections.entrySet().stream()

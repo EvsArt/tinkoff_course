@@ -8,13 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("MultipleStringLiterals")
+@Slf4j
 public class ReportFileService {
-
-    Logger logger = LogManager.getLogger();
 
     private final Path parentPath = Constants.reportsPath;
 
@@ -27,7 +25,7 @@ public class ReportFileService {
                 return createADOCDocument(tables);
             }
         } catch (IOException e) {
-            logger.error("Error with writing report to file!");
+            log.error("Error with writing report to file!");
             throw new RuntimeException(e);
         }
 
@@ -39,16 +37,16 @@ public class ReportFileService {
         Files.createFile(fileName);
         try (OutputStream os = Files.newOutputStream(fileName)) {
             for (ReportTable table : tables) {
-                os.write(("### " + table.name() + "\n").getBytes());
+                os.write(String.format("### %s\n", table.name()).getBytes());
                 List<String> columnsName = table.args().getFirst();
-                os.write(("|" + String.join("|", columnsName) + "|\n").getBytes());
+                os.write(String.format("|%s|\n", String.join("|", columnsName)).getBytes());
                 os.write("|----------|----------|\n".getBytes());
                 for (int i = 1; i < table.args().size(); i++) {
-                    os.write(("|" + String.join("|", table.args().get(i)) + "|\n").getBytes());
+                    os.write(String.format("|%s|\n", String.join("|", table.args().get(i))).getBytes());
                 }
             }
         }
-        logger.info("Report " + fileName + " has been formed");
+        log.info(String.format("Report %s has been formed", fileName));
         return fileName;
     }
 
@@ -58,24 +56,24 @@ public class ReportFileService {
         Files.createFile(fileName);
         try (OutputStream os = Files.newOutputStream(fileName)) {
             for (ReportTable table : tables) {
-                os.write(("=== " + table.name() + "\n").getBytes());
+                os.write(String.format("=== %s\n", table.name()).getBytes());
                 List<String> columnsName = table.args().getFirst();
                 String[] sizes = new String[columnsName.size()];
                 Arrays.fill(sizes, "1");
-                os.write(("[cols=\"" + String.join(",", sizes) + "\"]\n").getBytes());
+                os.write(String.format("[cols=\"%s\"]\n", String.join(",", sizes)).getBytes());
                 os.write("|===\n".getBytes());
                 for (String s : columnsName) {
                     os.write(("|" + s + "\n").getBytes());
                 }
                 for (int i = 1; i < table.args().size(); i++) {
                     for (String s : table.args().get(i)) {
-                        os.write(("|" + s + "\n").getBytes());
+                        os.write(String.format("|%s\n", s).getBytes());
                     }
                 }
                 os.write("|===\n".getBytes());
             }
         }
-        logger.info("Report " + fileName + " has been formed");
+        log.info(String.format("Report %s has been formed", fileName));
         return fileName;
     }
 
