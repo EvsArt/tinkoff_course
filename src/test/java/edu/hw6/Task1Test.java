@@ -1,5 +1,6 @@
 package edu.hw6;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +23,49 @@ class Task1Test {
     private static final String ROOT_DIR = "./src/main/resources/";
     private static final String WORKING_DIR = "Task1/";
     private static final String MAP_DIR = "diskmap";
+    private static final Path WORKING_PATH = Path.of(ROOT_DIR, WORKING_DIR);
     private static final Path MAP_PATH = Path.of(ROOT_DIR, WORKING_DIR, MAP_DIR);
 
     @BeforeAll
     static void createDirs() throws IOException {
-        if (Files.notExists(MAP_PATH)) {
-            Files.createDirectories(MAP_PATH);
+        if (Files.exists(WORKING_PATH)) {
+            removeDir();
         }
+        Files.createDirectories(WORKING_PATH);
+    }
+
+    @BeforeEach
+    public void clearDir() throws IOException {
+        Files.walk(MAP_PATH)
+            .filter(Files::isRegularFile)
+            .forEach(file -> {
+                try {
+                    Files.delete(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        Files.list(MAP_PATH).forEach(file -> {
+            try {
+                Files.delete(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @AfterAll
+    public static void removeDir() throws IOException {
+        Files.walk(WORKING_PATH)
+            .filter(Files::isRegularFile)
+            .forEach(file -> {
+                try {
+                    Files.delete(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        Files.delete(WORKING_PATH);
     }
 
     Task1.DiskMap map = null;

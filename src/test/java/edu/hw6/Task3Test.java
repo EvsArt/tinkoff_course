@@ -1,5 +1,9 @@
 package edu.hw6;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -10,15 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import static edu.hw6.Task3.globMatches;
-import static edu.hw6.Task3.largerThan;
-import static edu.hw6.Task3.magicNumber;
-import static edu.hw6.Task3.readable;
-import static edu.hw6.Task3.regexContains;
-import static edu.hw6.Task3.regularFile;
+import static edu.hw6.Task3.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -28,12 +24,13 @@ class Task3Test {
 
     @BeforeAll
     static void createDirs() throws IOException {
-        if (Files.notExists(filesDir)) {
-            Files.createDirectories(filesDir);
+        if (Files.exists(filesDir)) {
+            removeDir();
         }
+        Files.createDirectories(filesDir);
     }
 
-    @AfterEach
+    @BeforeEach
     public void clearDir() throws IOException {
         Files.walk(filesDir)
             .filter(Files::isRegularFile)
@@ -44,6 +41,20 @@ class Task3Test {
                     throw new RuntimeException(e);
                 }
             });
+    }
+
+    @AfterAll
+    public static void removeDir() throws IOException {
+        Files.walk(filesDir)
+            .filter(Files::isRegularFile)
+            .forEach(it -> {
+                try {
+                    Files.delete(it);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        Files.deleteIfExists(filesDir);
     }
 
     @Test

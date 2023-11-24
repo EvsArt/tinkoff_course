@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,22 +24,19 @@ class Task2Test {
 
     private static final String ROOT_DIR = "./src/main/resources/";
     private static final String WORKING_DIR = "Task2/";
-    private static final Path parentPath = Path.of(ROOT_DIR, WORKING_DIR);
+    private static final Path PARENT_PATH = Path.of(ROOT_DIR, WORKING_DIR);
 
     @BeforeAll
-    static void createDirs() {
-        try {
-            if (Files.notExists(parentPath)) {
-                Files.createDirectories(parentPath);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    static void createDirs() throws IOException {
+        if (Files.exists(PARENT_PATH)) {
+            removeDir();
         }
+        Files.createDirectories(PARENT_PATH);
     }
 
-    @AfterEach
+    @BeforeEach
     void clearDir() throws IOException {
-        Files.walk(parentPath)
+        Files.walk(PARENT_PATH)
             .filter(Files::isRegularFile)
             .forEach(it -> {
             try {
@@ -47,12 +45,20 @@ class Task2Test {
                 throw new RuntimeException(e);
             }
         });
-        Files.deleteIfExists(parentPath);
     }
 
-    @BeforeEach
-    void createDir() throws IOException {
-        Files.createDirectories(parentPath);
+    @AfterAll
+    static void removeDir() throws IOException {
+        Files.walk(PARENT_PATH)
+            .filter(Files::isRegularFile)
+            .forEach(file -> {
+                try {
+                    Files.delete(file);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        Files.deleteIfExists(PARENT_PATH);
     }
 
     @Test
@@ -61,7 +67,7 @@ class Task2Test {
 
         String fileName = "file";
         String fileExtension = ".txt";
-        Path filePath = parentPath.resolve(fileName + fileExtension);
+        Path filePath = PARENT_PATH.resolve(fileName + fileExtension);
 
         Files.createFile(filePath);
         task2.cloneFile(filePath);
@@ -70,7 +76,7 @@ class Task2Test {
         task2.cloneFile(filePath);
         task2.cloneFile(filePath);
 
-        List<String> resFileNames = Files.list(parentPath).map(it -> it.getFileName().toString()).toList();
+        List<String> resFileNames = Files.list(PARENT_PATH).map(it -> it.getFileName().toString()).toList();
 
         List<String> expFileNames = List.of(
             fileName + fileExtension,
@@ -89,13 +95,13 @@ class Task2Test {
     @DisplayName("Negative tests cloning file")
     void cloneFileNegative() throws IOException {
 
-        Path newFile = parentPath.resolve("a - копия");
+        Path newFile = PARENT_PATH.resolve("a - копия");
 
         Files.createFile(newFile);
         task2.cloneFile(newFile);
 
-        assertTrue(Files.exists(parentPath.resolve("a - копия (2)")));
-        assertThrows(FileNotFoundException.class, () -> task2.cloneFile(parentPath.resolve("notExist")));
+        assertTrue(Files.exists(PARENT_PATH.resolve("a - копия (2)")));
+        assertThrows(FileNotFoundException.class, () -> task2.cloneFile(PARENT_PATH.resolve("notExist")));
         assertThrows(NullPointerException.class, () -> task2.cloneFile(null));
 
     }
