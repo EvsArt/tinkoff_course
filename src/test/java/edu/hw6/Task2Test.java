@@ -5,11 +5,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import javax.imageio.IIOException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Task2Test {
 
@@ -30,75 +36,67 @@ class Task2Test {
         }
     }
 
+    @AfterEach
+    void clearDir() throws IOException {
+        Files.walk(parentPath)
+            .filter(Files::isRegularFile)
+            .forEach(it -> {
+            try {
+                Files.delete(it);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        Files.deleteIfExists(parentPath);
+    }
+
+    @BeforeEach
+    void createDir() throws IOException {
+        Files.createDirectories(parentPath);
+    }
+
     @Test
     @DisplayName("Test cloning file")
-    void cloneFile() {
+    void cloneFile() throws IOException {
 
         String fileName = "file";
         String fileExtension = ".txt";
         Path filePath = parentPath.resolve(fileName + fileExtension);
 
-        try {
-            Files.list(parentPath).forEach(it -> {
-                try {
-                    Files.delete(it);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            Files.deleteIfExists(parentPath);
-            Files.createDirectory(parentPath);
-            Files.createFile(filePath);
-            task2.cloneFile(filePath);
-            task2.cloneFile(filePath);
-            task2.cloneFile(filePath);
-            task2.cloneFile(filePath);
-            task2.cloneFile(filePath);
+        Files.createFile(filePath);
+        task2.cloneFile(filePath);
+        task2.cloneFile(filePath);
+        task2.cloneFile(filePath);
+        task2.cloneFile(filePath);
+        task2.cloneFile(filePath);
 
-            List<String> resFileNames = Files.list(parentPath).map(it -> it.getFileName().toString()).toList();
-            List<String> expFileNames = List.of(
-                fileName + fileExtension,
-                fileName + " - копия" + fileExtension,
-                fileName + " - копия (2)" + fileExtension,
-                fileName + " - копия (3)" + fileExtension,
-                fileName + " - копия (4)" + fileExtension,
-                fileName + " - копия (5)" + fileExtension
-            );
+        List<String> resFileNames = Files.list(parentPath).map(it -> it.getFileName().toString()).toList();
 
-            assertThat(resFileNames.containsAll(expFileNames)).isTrue();
-            assertThat(resFileNames.size()).isEqualTo(expFileNames.size());
+        List<String> expFileNames = List.of(
+            fileName + fileExtension,
+            fileName + " - копия" + fileExtension,
+            fileName + " - копия (2)" + fileExtension,
+            fileName + " - копия (3)" + fileExtension,
+            fileName + " - копия (4)" + fileExtension,
+            fileName + " - копия (5)" + fileExtension
+        );
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertEquals(Set.copyOf(resFileNames), Set.copyOf(expFileNames));
 
     }
 
     @Test
     @DisplayName("Negative tests cloning file")
-    void cloneFileNegative() {
+    void cloneFileNegative() throws IOException {
 
-        try {
-            Files.list(parentPath).forEach(it -> {
-                try {
-                    Files.delete(it);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        Path newFile = parentPath.resolve("a - копия");
 
-            Files.deleteIfExists(parentPath);
-            Files.createDirectory(parentPath);
-            Files.createFile(parentPath.resolve("a - копия"));
-            task2.cloneFile(parentPath.resolve("a - копия"));
+        Files.createFile(newFile);
+        task2.cloneFile(newFile);
 
-            assertThat(Files.exists(parentPath.resolve("a - копия (2)"))).isTrue();
-            assertThrows(FileNotFoundException.class, () -> task2.cloneFile(parentPath.resolve("notExist")));
-            assertThrows(NullPointerException.class, () -> task2.cloneFile(null));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertTrue(Files.exists(parentPath.resolve("a - копия (2)")));
+        assertThrows(FileNotFoundException.class, () -> task2.cloneFile(parentPath.resolve("notExist")));
+        assertThrows(NullPointerException.class, () -> task2.cloneFile(null));
 
     }
 
@@ -118,11 +116,11 @@ class Task2Test {
         String res21 = task2.getNewCopyName(res2);
         String res22 = task2.getNewCopyName(res21);
 
-        assertThat(res1).isEqualTo("file - копия");
-        assertThat(res2).isEqualTo("file - копия.txt");
-        assertThat(res3).isEqualTo("file - копия.");
-        assertThat(res21).isEqualTo("file - копия (2).txt");
-        assertThat(res22).isEqualTo("file - копия (3).txt");
+        assertEquals(res1, "file - копия");
+        assertEquals(res2, "file - копия.txt");
+        assertEquals(res3, "file - копия.");
+        assertEquals(res21, "file - копия (2).txt");
+        assertEquals(res22, "file - копия (3).txt");
 
         assertThrows(IllegalArgumentException.class, () -> task2.getNewCopyName(file4));
         assertThrows(NullPointerException.class, () -> task2.getNewCopyName(file5));

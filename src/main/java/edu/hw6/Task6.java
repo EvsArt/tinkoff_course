@@ -18,9 +18,9 @@ import java.util.regex.Pattern;
 
 public class Task6 {
 
-    private final int checkingPortsCount = 49161;
-    private final Duration timeoutDuration = Duration.ofSeconds(10);
-    private final String elementTagsRegExp = "</?td>";
+    private final static int CHECKING_PORTS_COUNT = 49161;
+    private final static Duration TIMEOUT_DURATION = Duration.ofSeconds(10);
+    private final static String ELEMENT_TAGS_REGEXP = "</?td>";
 
     @SuppressWarnings("EmptyBlock")
     public List<PortInfo> getBusyPortsAndProtocols() {
@@ -29,7 +29,7 @@ public class Task6 {
 
         Map<Integer, List<PortInfo>> portsInfoFromWiki = getPortsAndProcessNames();
 
-        for (int port = 0; port <= checkingPortsCount; port++) {
+        for (int port = 0; port <= CHECKING_PORTS_COUNT; port++) {
 
             try (var x = new DatagramSocket(port)) {
             } catch (IOException e) {
@@ -95,7 +95,7 @@ public class Task6 {
                 .GET()
                 .uri(new URI(
                     "https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BF%D0%BE%D1%80%D1%82%D0%BE%D0%B2_TCP_%D0%B8_UDP"))
-                .timeout(timeoutDuration)
+                .timeout(TIMEOUT_DURATION)
                 .build();
 
             HttpResponse<String> response = HttpClient.newHttpClient()
@@ -137,7 +137,7 @@ public class Task6 {
         List<String> lines = blockHtml.lines().toList();
 
         String[] portAndProtocol = lines.get(1)
-            .replaceAll(elementTagsRegExp, "")
+            .replaceAll(ELEMENT_TAGS_REGEXP, "")
             .replaceAll("<[\\t\\w\\s\\W\\S]*>", "").split("/");
         if (portAndProtocol.length < 2) {
             return null;
@@ -169,7 +169,7 @@ public class Task6 {
         }
 
         service = lines.get(2)
-            .replaceAll(elementTagsRegExp, "");
+            .replaceAll(ELEMENT_TAGS_REGEXP, "");
 
         for (int port : ports) {
             for (Protocol protocol : protocols) {

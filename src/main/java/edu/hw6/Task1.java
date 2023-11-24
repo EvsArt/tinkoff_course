@@ -7,18 +7,21 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Task1 {
 
-    private static final int BUFFER_SIZE = 4096;
-
+    @Slf4j
     static class DiskMap implements Map<String, String> {
+
+        private static final int FILE_READER_BUFFER_SIZE = 4096;
 
         private final Path mapDir;
 
@@ -32,8 +35,9 @@ public class Task1 {
             try {
                 return (int) Files.list(mapDir).count();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with directory %s in method size() in DiskMap", mapDir));
             }
+            return -1;
         }
 
         @Override
@@ -56,8 +60,12 @@ public class Task1 {
                     .map(file -> this.get(file.getFileName().toString()))
                     .anyMatch(value -> value.equals(o));
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format(
+                    "IO error with file %s in method containsValue() in DiskMap",
+                    mapDir.resolve((Path) o)
+                ));
             }
+            return false;
         }
 
         @Override
@@ -65,12 +73,16 @@ public class Task1 {
             Objects.requireNonNull(o);
             assert !((String) o).isEmpty();
 
-            var buffer = ByteBuffer.allocate(BUFFER_SIZE);
+            var buffer = ByteBuffer.allocate(FILE_READER_BUFFER_SIZE);
 
             Path file = mapDir.resolve((String) o);
+            if (!Files.exists(file)) {
+                return null;
+            }
             try (FileChannel channel = new RandomAccessFile(file.toFile(), "r").getChannel()) {
                 channel.read(buffer);
             } catch (IOException e) {
+                log.error(String.format("IO error with file %s in method get() in DiskMap", file));
                 return null;
             }
 
@@ -95,6 +107,7 @@ public class Task1 {
                 }
                 Files.createFile(file);
             } catch (IOException e) {
+                log.error(String.format("IO error with file %s in method put() in DiskMap", file));
                 throw new RuntimeException(e);
             }
 
@@ -116,11 +129,9 @@ public class Task1 {
             Path file = mapDir.resolve((String) o);
 
             try {
-                if (Files.exists(file)) {
-                    Files.delete(file);
-                }
+                Files.deleteIfExists(file);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with file %s in method delete() in DiskMap", file));
             }
             return valueOfObj;
         }
@@ -140,11 +151,14 @@ public class Task1 {
                         try {
                             Files.delete(file);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            log.error(String.format(
+                                "IO error with deleting file %s in method clear() in DiskMap",
+                                file
+                            ));
                         }
                     });
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with directory %s in method clear() in DiskMap", mapDir));
             }
         }
 
@@ -156,7 +170,8 @@ public class Task1 {
                     .map(it -> it.getFileName().toString())
                     .collect(Collectors.toSet());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with directory %s in method keySet() in DiskMap", mapDir));
+                return Set.of();
             }
         }
 
@@ -166,9 +181,10 @@ public class Task1 {
             try {
                 return Files.list(mapDir)
                     .map(file -> this.get(file.getFileName().toString()))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with directory %s in method values() in DiskMap", mapDir));
+                return Collections.emptyList();
             }
         }
 
@@ -177,39 +193,13 @@ public class Task1 {
         public Set<Map.Entry<String, String>> entrySet() {
             try {
                 return Files.list(mapDir)
-                    .map(file -> new Entry(file.getFileName().toString(), this.get(file.getFileName().toString())))
+                    .map(file -> Map.entry(file.getFileName().toString(), this.get(file.getFileName().toString())))
                     .collect(Collectors.toSet());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error(String.format("IO error with directory %s in method containsValue() in DiskMap", mapDir));
+                return Set.of();
             }
 
-        }
-
-        static class Entry implements Map.Entry<String, String> {
-
-            private final String key;
-            private String value;
-
-            Entry(String key, String value) {
-                this.key = key;
-                this.value = value;
-            }
-
-            @Override
-            public String getKey() {
-                return key;
-            }
-
-            @Override
-            public String getValue() {
-                return value;
-            }
-
-            @Override
-            public String setValue(String s) {
-                this.value = s;
-                return value;
-            }
         }
 
     }

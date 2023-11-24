@@ -9,8 +9,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static edu.hw6.Task3.globMatches;
 import static edu.hw6.Task3.largerThan;
@@ -18,41 +19,41 @@ import static edu.hw6.Task3.magicNumber;
 import static edu.hw6.Task3.readable;
 import static edu.hw6.Task3.regexContains;
 import static edu.hw6.Task3.regularFile;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class Task3Test {
 
     private static final Path filesDir = Path.of("./src/main/resources/Task3/");
 
     @BeforeAll
-    static void createDirs() {
-        try {
-            if (Files.notExists(filesDir)) {
-                Files.createDirectories(filesDir);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    static void createDirs() throws IOException {
+        if (Files.notExists(filesDir)) {
+            Files.createDirectories(filesDir);
         }
     }
 
-    @BeforeEach
-    public void clearDir() {
-        try {
-            Files.list(filesDir)
-                .forEach(it -> {
-                    try {
-                        Files.delete(it);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @AfterEach
+    public void clearDir() throws IOException {
+        Files.walk(filesDir)
+            .filter(Files::isRegularFile)
+            .forEach(it -> {
+                try {
+                    Files.delete(it);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
     @Test
-    public void testAbstractFilter() {
+    public void testAbstractFilter() throws IOException {
+
+        createPNGFileWithSize("oneFile.png", 120_000);
+        createPNGFileWithSize("twoFile.png", 110_000);
+        createPNGFileWithSize("threeFile.png", 90_000);
+        createNotPNGFileWithSize("nottwoFile.png", 130_000);
+
         DirectoryStream.Filter<Path> filter = regularFile
             .and(readable)
             .and(largerThan(100_000))
@@ -60,76 +61,74 @@ class Task3Test {
             .and(globMatches("*.png"))
             .and(regexContains("two"));
 
-        createPNGFileWithSize("oneFile.png", 120_000);
-        createPNGFileWithSize("twoFile.png", 110_000);
-        createPNGFileWithSize("threeFile.png", 90_000);
-        createNotPNGFileWithSize("nottwoFile.png", 130_000);
+        DirectoryStream<Path> entries = Files.newDirectoryStream(filesDir, filter);
+        Iterator<Path> iter = entries.iterator();
+        Path filteredFile = iter.next();
+        boolean hasOneMoreFiles = iter.hasNext();
+        entries.close();
 
-        try (DirectoryStream<Path> entries = Files.newDirectoryStream(filesDir, filter)) {
-            Iterator<Path> iter = entries.iterator();
-            assertThat(iter.next()).isEqualTo(filesDir.resolve("twoFile.png"));
-            assertThat(iter.hasNext()).isFalse();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertEquals(filteredFile, filesDir.resolve("twoFile.png"));
+        assertFalse(hasOneMoreFiles);
 
     }
 
     @Test
-    public void testSimpleAbstractFilter() {
-        DirectoryStream.Filter<Path> filter = regularFile;
+    public void testSimpleAbstractFilter() throws IOException {
 
         createPNGFileWithSize("oneFile.png", 120_000);
         createPNGFileWithSize("twoFile.png", 110_000);
         createPNGFileWithSize("threeFile.png", 90_000);
-        createNotPNGFileWithSize("nottwoFile.png", 130_000);
+        createNotPNGFileWithSize("notPngFile.png", 130_000);
 
-        try (DirectoryStream<Path> entries = Files.newDirectoryStream(filesDir, filter)) {
-            List<Path> res = new ArrayList<>();
-            entries.iterator().forEachRemaining(res::add);
-            assertThat(res.size()).isEqualTo(4);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        DirectoryStream.Filter<Path> filter = regularFile;
 
-    }
+        List<Path> res = new ArrayList<>();
+        DirectoryStream<Path> entries = Files.newDirectoryStream(filesDir, filter);
+        entries.iterator().forEachRemaining(res::add);
+        entries.close();
 
-    private void createPNGFileWithSize(String name, long size) {
+        List<Path> expRes = List.of(
+            Path.of(filesDir.resolve("oneFile.png").toString()),
+            Path.of(filesDir.resolve("twoFile.png").toString()),
+            Path.of(filesDir.resolve("threeFile.png").toString()),
+            Path.of(filesDir.resolve("notPngFile.png").toString())
+        );
 
-        Path filePath = filesDir.resolve(name);
-        try {
-            if (Files.exists(filePath)) {
-                Files.delete(filePath);
-            }
-            Files.createFile(filePath);
-            RandomAccessFile file = new RandomAccessFile(filePath.toFile(), "rw");
-
-            ByteBuffer pngFileHeader = ByteBuffer.wrap(new byte[] {(byte) 0x89, 'P', 'N', 'G'});
-            file.getChannel().write(pngFileHeader);
-
-            file.setLength(size);
-            file.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertEquals(Set.copyOf(res), Set.copyOf(expRes));
 
     }
 
-    private void createNotPNGFileWithSize(String name, long size) {
+    private void createPNGFileWithSize(String name, long size) throws IOException {
 
         Path filePath = filesDir.resolve(name);
-        try {
-            if (Files.exists(filePath)) {
-                Files.delete(filePath);
-            }
-            Files.createFile(filePath);
 
-            RandomAccessFile file = new RandomAccessFile(filePath.toFile(), "rw");
-            file.setLength(size);
-            file.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
         }
+
+        Files.createFile(filePath);
+        RandomAccessFile file = new RandomAccessFile(filePath.toFile(), "rw");
+
+        ByteBuffer pngFileHeader = ByteBuffer.wrap(new byte[] {(byte) 0x89, 'P', 'N', 'G'});
+        file.getChannel().write(pngFileHeader);
+
+        file.setLength(size);
+        file.close();
+
+    }
+
+    private void createNotPNGFileWithSize(String name, long size) throws IOException {
+
+        Path filePath = filesDir.resolve(name);
+
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+        }
+        Files.createFile(filePath);
+
+        RandomAccessFile file = new RandomAccessFile(filePath.toFile(), "rw");
+        file.setLength(size);
+        file.close();
 
     }
 

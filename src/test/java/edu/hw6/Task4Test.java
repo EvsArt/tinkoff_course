@@ -5,9 +5,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Task4Test {
 
@@ -28,20 +29,30 @@ class Task4Test {
         }
     }
 
+    @AfterEach
+    void clearDir() throws IOException {
+        Files.walk(workingDir)
+            .filter(Files::isRegularFile)
+            .forEach(path -> {
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+    }
+
     @Test
-    void writeString() {
+    void writeString() throws IOException {
 
         task4.writeString(workingDir.resolve(fileName), outputString);
 
-        try (InputStream is = Files.newInputStream(workingDir.resolve(fileName))) {
-            byte[] fileContent = is.readAllBytes();
-            String s = new String(fileContent, StandardCharsets.UTF_8);
+        InputStream is = Files.newInputStream(workingDir.resolve(fileName));
+        byte[] fileContent = is.readAllBytes();
+        is.close();
+        String s = new String(fileContent, StandardCharsets.UTF_8);
 
-            assertThat(s).isEqualTo(outputString);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        assertEquals(s, outputString);
 
     }
 }

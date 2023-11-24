@@ -14,7 +14,7 @@ public class Task2 {
         Objects.requireNonNull(path);
 
         if (!Files.exists(path)) {
-            throw new FileNotFoundException("File not found in " + path);
+            throw new FileNotFoundException(String.format("File not found in " + path));
         }
 
         String fileName = path.getFileName().toString();
