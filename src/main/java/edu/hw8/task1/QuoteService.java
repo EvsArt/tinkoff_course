@@ -1,6 +1,5 @@
 package edu.hw8.task1;
 
-import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,6 +10,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QuoteService {
@@ -55,7 +55,7 @@ public class QuoteService {
             "<meta\\sname=\"description\"\\scontent=\"(.*)\\sБольше\\sцитат\\sвы\\sнайдёте\\sна\\sсайте"
         );
         Matcher matcher = pattern.matcher(html);
-        if(matcher.find()) {
+        if (matcher.find()) {
             return matcher.group(1);
         }
         return QUOTE_NOT_FOUND_MSG;

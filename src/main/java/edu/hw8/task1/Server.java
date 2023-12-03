@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Server {
+public final class Server {
 
     private int port;
     private final ServerSocket server;
@@ -44,7 +44,7 @@ public class Server {
     public void close() {
         this.closed = true;
         // closing last waiting socket
-        try (Socket ignored = new Socket(InetAddress.getByName(Constants.SERVER_NAME), port)){
+        try (Socket ignored = new Socket(InetAddress.getByName(Constants.SERVER_NAME), port)) {
             log.info(String.format("Server closed on port %d", this.port));
         } catch (IOException e) {
             log.error("Last waited socket is unavailable");
@@ -71,7 +71,7 @@ public class Server {
         ByteBuffer buffer = ByteBuffer.allocate(Constants.REQUEST_RESPONSE_BUFFER_SIZE);
 
         try (var reader = new DataInputStream(socket.getInputStream());
-            var writer = new DataOutputStream(socket.getOutputStream())) {
+             var writer = new DataOutputStream(socket.getOutputStream())) {
 
             int reqSize = reader.read(buffer.array());
             byte[] reqBytes = new byte[reqSize];

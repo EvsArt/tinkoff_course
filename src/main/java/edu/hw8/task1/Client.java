@@ -1,21 +1,10 @@
 package edu.hw8.task1;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,8 +19,8 @@ public class Client {
     public String pushRequest(String keyWord) {
 
         try (Socket client = new Socket(InetAddress.getByName(Constants.SERVER_NAME), port);
-            var reader = new DataInputStream(client.getInputStream());
-             var writer = new DataOutputStream(client.getOutputStream())){
+             var reader = new DataInputStream(client.getInputStream());
+             var writer = new DataOutputStream(client.getOutputStream())) {
 
             writer.write(keyWord.getBytes());
 
