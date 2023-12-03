@@ -21,7 +21,8 @@ public class Task3 {
     private final Map<String, String> hashToUserName;
     private final Map<String, String> userNameToPassword = new HashMap<>();
     private final MessageDigest md;
-    private static final String POSSIBLE_PASSWORD_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String POSSIBLE_PASSWORD_CHARS =
+        "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final int POSSIBLE_PASSWORD_CHARS_COUNT = POSSIBLE_PASSWORD_CHARS.length();
 
     public Task3(String infoFromDB) {
@@ -157,7 +158,7 @@ public class Task3 {
         if (ch == 'Z') {
             return '0';
         }
-        return (char) (ch+1);
+        return (char) (ch + 1);
     }
 
 }
