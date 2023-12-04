@@ -3,7 +3,9 @@ package edu.hw9.task3;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MultithreadDFSTest {
 
@@ -47,7 +49,6 @@ class MultithreadDFSTest {
         assertEquals(List.of(0), solution2);
 
         assertThrows(RuntimeException.class, dfs3::getSolution);
-
 
     }
 }

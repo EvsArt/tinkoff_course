@@ -1,7 +1,5 @@
 package edu.hw9.task3;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
-import edu.hw9.task2.TreeSearcher;
 import lombok.extern.slf4j.Slf4j;
 
 // Map<Integer, Node> is map where key is node value and value is its parent node
@@ -37,13 +34,13 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
 
         res.add(needNodeValue);
 
-        if(res.size() == 1 && res.get(0) != startNode.value)
+        if (res.size() == 1 && res.get(0) != startNode.value) {
             throw new RuntimeException("Solution was not found");
+        }
 
         return res;
 
     }
-
 
     @Override
     protected Map<Integer, Node> compute() {
@@ -54,7 +51,7 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
                 it -> startNode
             )));
 
-        if(res.containsKey(needNodeValue)) {
+        if (res.containsKey(needNodeValue)) {
             return res;
         }
 
@@ -73,8 +70,7 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
 
     }
 
-
-    public record NodeWithPrevNode(Node node, Node prevNode){
+    public record NodeWithPrevNode(Node node, Node prevNode) {
     }
 
 }
