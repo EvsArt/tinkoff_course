@@ -35,6 +35,7 @@ public class Task4 {
         try {
             count.await();
         } catch (InterruptedException e) {
+            log.error("error with waiting end of the threads!");
             throw new RuntimeException(e);
         }
 

@@ -17,6 +17,7 @@ class Task2Test {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            // given
             return Stream.of(
                 Arguments.of("()()()", List.of("()", "()", "()")),
                 Arguments.of("((()))", List.of("((()))")),
@@ -30,9 +31,9 @@ class Task2Test {
     @DisplayName("Correct input")
     @ArgumentsSource(DefaultClusterizeArgumentsProvider.class)
     void clusterize(String testString, List<String> expectedRes) {
-
+        // when
         List<String> res = Task2.clusterize(testString);
-
+        // then
         assertThat(res).isEqualTo(expectedRes);
 
     }
@@ -41,6 +42,7 @@ class Task2Test {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            // given
             return Stream.of(
                 Arguments.of("a((b())(cc))(()d((e)()))", List.of("a", "((b())(cc))", "(()d((e)()))"))
             );
@@ -51,9 +53,9 @@ class Task2Test {
     @DisplayName("Test clustering with letters between brackets")
     @ArgumentsSource(ClusterizeWithLettersArgumentsProvider.class)
     void clusterizeWithLetters(String testString, List<String> expectedRes) {
-
+        // when
         List<String> res = Task2.clusterize(testString);
-
+        // then
         assertThat(res).isEqualTo(expectedRes);
 
     }
@@ -62,6 +64,7 @@ class Task2Test {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            // given
             return Stream.of(
                 Arguments.of(")()()", List.of("()", "()")),
                 Arguments.of("()(()", List.of("()")),
@@ -76,9 +79,9 @@ class Task2Test {
     @DisplayName("Test clustering with wrong brackets order")
     @ArgumentsSource(ClusterizeWithWrongOrderBracketsArgumentsProvider.class)
     void wrongOrderBrackets(String testString, List<String> expectedRes) {
-
+        // when
         List<String> res = Task2.clusterize(testString);
-
+        // then
         assertThat(res).isEqualTo(expectedRes);
 
     }

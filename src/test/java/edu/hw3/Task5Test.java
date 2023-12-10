@@ -11,11 +11,8 @@ class Task5Test {
     @Test
     @DisplayName("Normal Data")
     void parseNormalContacts() {
-
+        // given
         String[] contacts = new String[] {"John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes", "Anton"};
-
-        Task5.FamilyName[] resAsc = Task5.parseContacts(contacts, "ASC");
-        Task5.FamilyName[] resDesc = Task5.parseContacts(contacts, "DESC");
 
         List<Task5.FamilyName> expectedRes = List.of(
             new Task5.FamilyName(null, "Anton"),
@@ -25,6 +22,10 @@ class Task5Test {
             new Task5.FamilyName("Locke", "John")
         );
 
+        // when
+        Task5.FamilyName[] resAsc = Task5.parseContacts(contacts, "ASC");
+        Task5.FamilyName[] resDesc = Task5.parseContacts(contacts, "DESC");
+        // then
         assertThat(resAsc).isEqualTo(expectedRes.toArray());
         assertThat(resDesc).isEqualTo(expectedRes.reversed().toArray());
 
@@ -33,7 +34,7 @@ class Task5Test {
     @Test
     @DisplayName("Fail Data")
     void parseFailContacts() {
-
+        // given
         String[] emptyContacts = new String[] {};
         String[] nullContact = new String[] {null};
         String[] blancContact = new String[] {""};
@@ -41,7 +42,7 @@ class Task5Test {
         String[] blankContacts = new String[] {"", ""};
         String[] nullArr = null;
         String[] normArr = new String[] {"Artur", "Shelby Thomas"};
-
+        // when
         Task5.FamilyName[] res1 = Task5.parseContacts(emptyContacts, "ASC");
         Task5.FamilyName[] res2 = Task5.parseContacts(nullContact, "ASC");
         Task5.FamilyName[] res3 = Task5.parseContacts(blancContact, "ASC");
@@ -49,7 +50,7 @@ class Task5Test {
         Task5.FamilyName[] res5 = Task5.parseContacts(blankContacts, "ASC");
         Task5.FamilyName[] res6 = Task5.parseContacts(nullArr, "ASC");
         Task5.FamilyName[] res7 = Task5.parseContacts(normArr, "NOTASCORDESC");
-
+        // then
         assertThat(res1).isEqualTo(new Task5.FamilyName[] {});
         assertThat(res2).isEqualTo(new Task5.FamilyName[] {null});
         assertThat(res3).isEqualTo(new Task5.FamilyName[] {null});

@@ -4,7 +4,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Task1 {
 
     AtomicLong counter = new AtomicLong(0);
@@ -35,6 +37,7 @@ public class Task1 {
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
+            log.error("error with waiting end of the threads!");
             throw new RuntimeException(e);
         }
 
