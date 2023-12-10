@@ -1,12 +1,11 @@
 package edu.project4.utils;
 
 import edu.project4.model.FractalImage;
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
+import javax.imageio.ImageIO;
 
 public final class ImageUtils {
 
@@ -19,8 +18,8 @@ public final class ImageUtils {
         for (int i = 0; i < data.height(); i++) {
             for (int j = 0; j < data.width(); j++) {
                 edu.project4.model.Color color;
-                if(data.isNull(j, i)) {
-                    color = edu.project4.model.Color.of(0,0,0);
+                if (data.isNull(j, i)) {
+                    color = edu.project4.model.Color.of(0, 0, 0);
                 } else {
                     color = data.getPixel(j, i).getColor();
                 }

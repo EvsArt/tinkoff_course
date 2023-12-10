@@ -3,15 +3,17 @@ package edu.project4.model;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Color implements Cloneable {
+public final class Color {
 
-    private Color(){
+    private Color() {
     }
+
+    private static final int MAX_COLOR_VALUE = 255;
 
     private int red = 0;
     private int green = 0;
     private int blue = 0;
-    private int brightness = 100;
+    private int brightness = MAX_COLOR_VALUE;
 
     public static Color of(int r, int g, int b) {
         Color res = new Color();
@@ -26,7 +28,7 @@ public class Color implements Cloneable {
     }
 
     public void setRed(int red) {
-        if(red < 0 || red > 255) {
+        if (red < 0 || red > MAX_COLOR_VALUE) {
             log.error("Illegal value of red ({})", red);
             throw new IllegalArgumentException("Red value must be between 0 and 255!");
         }
@@ -38,7 +40,7 @@ public class Color implements Cloneable {
     }
 
     public void setGreen(int green) {
-        if(green < 0 || green > 255) {
+        if (green < 0 || green > MAX_COLOR_VALUE) {
             log.error("Illegal value of green ({})", green);
             throw new IllegalArgumentException("Green value must be between 0 and 255!");
         }
@@ -50,7 +52,7 @@ public class Color implements Cloneable {
     }
 
     public void setBlue(int blue) {
-        if(blue < 0 || blue > 255) {
+        if (blue < 0 || blue > MAX_COLOR_VALUE) {
             log.error("Illegal value of blue ({})", blue);
             throw new IllegalArgumentException("Blue value must be between 0 and 255!");
         }
@@ -62,14 +64,14 @@ public class Color implements Cloneable {
     }
 
     public void setBrightness(int brightness) {
-        if(brightness < 0 || brightness > 100) {
+        if (brightness < 0 || brightness > MAX_COLOR_VALUE) {
             log.error("Illegal value of brightness ({})", brightness);
-            throw new IllegalArgumentException("Brightness value must be between 0 and 100!");
+            throw new IllegalArgumentException("Brightness value must be between 0 and 255!");
         }
         this.brightness = brightness;
     }
 
-    @Override public Color clone() {
+    public Color copy() {
         return Color.of(red, green, blue);
     }
 }

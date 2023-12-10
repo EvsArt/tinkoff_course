@@ -8,6 +8,7 @@ public class Pixel {
     public int getHitsCount() {
         return hitsCount;
     }
+
     public int incHitsCount() {
         return ++hitsCount;
     }
