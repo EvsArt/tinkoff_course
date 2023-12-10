@@ -16,6 +16,7 @@ class Task3Test {
 
     static class FreqDictArgumentsProvider implements ArgumentsProvider {
 
+        // given
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
             return Stream.of(
@@ -32,9 +33,10 @@ class Task3Test {
         List<T> testInput,
         Map<T, Integer> expectedResult
     ) {
-
+        // when
         Map<T, Integer> res = Task3.freqDict(testInput);
 
+        // then
         assertThat(res).isEqualTo(expectedResult);
     }
 }

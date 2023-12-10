@@ -17,6 +17,7 @@ class Task1Test {
 
     @ParameterizedTest
     @DisplayName("Get mirror char")
+    // given
     @CsvSource(value = {
         "a, z",
         "b, y",
@@ -28,7 +29,9 @@ class Task1Test {
         "я, я"
     })
     void getMirrorChar(char testChar, char expectedChar) {
+        // when
         char res = Task1.getMirrorChar(testChar);
+        // then
         assertThat(res).isEqualTo(expectedChar);
     }
 
@@ -36,6 +39,7 @@ class Task1Test {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            // given
             return Stream.of(
                 Arguments.of("Hello world!", "Svool dliow!"),
                 Arguments.of(
@@ -50,9 +54,9 @@ class Task1Test {
     @DisplayName("Main function")
     @ArgumentsSource(AtbashArgumentsProvider.class)
     void atbash(String testString, String expectedResult) {
-
+        // when
         String res = Task1.atbash(testString);
-
+        // then
         assertThat(res).isEqualTo(expectedResult);
     }
 

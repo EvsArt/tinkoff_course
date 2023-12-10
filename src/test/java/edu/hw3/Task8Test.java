@@ -10,8 +10,10 @@ class Task8Test {
 
     @Test
     void testStandardValues() {
+        // given
         Task8.BackwardIterator<Integer> iter = new Task8.BackwardIterator<>(List.of(1, 2, 3));
 
+        // when
         boolean HN1 = iter.hasNext();
         int val1 = iter.next();
         boolean HN2 = iter.hasNext();
@@ -20,6 +22,7 @@ class Task8Test {
         int val3 = iter.next();
         boolean HN4 = iter.hasNext();
 
+        // then
         assertThat(HN1).isTrue();
         assertThat(val1).isEqualTo(3);
         assertThat(HN2).isTrue();

@@ -18,6 +18,7 @@ class Task4Test {
 
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            // given
             return Stream.of(
                 Arguments.of(3999, "MMMCMXCIX"),
                 Arguments.of(1000, "M"),
@@ -58,14 +59,16 @@ class Task4Test {
     @ParameterizedTest
     @ArgumentsSource(NormalRomanDigitsArgumentsProvider.class)
     void defaultConvertToRoman(int input, String expectedResult) {
+        // when
         String res = Task4.convertToRoman(input);
-
+        // then
         assertThat(res).isEqualTo(expectedResult);
     }
 
     static class WrongRomanDigitsArgumentsProvider implements ArgumentsProvider {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
+            //given
             return Stream.of(
                 Arguments.of(4000, Task4.WRONGINPUT),
                 Arguments.of(0, Task4.WRONGINPUT)
@@ -76,8 +79,9 @@ class Task4Test {
     @ParameterizedTest
     @ArgumentsSource(WrongRomanDigitsArgumentsProvider.class)
     void wrongConvertToRoman(int input, String expectedResult) {
+        // when
         String res = Task4.convertToRoman(input);
-
+        // then
         assertThat(res).isEqualTo(expectedResult);
     }
 
