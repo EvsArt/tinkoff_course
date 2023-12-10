@@ -78,11 +78,12 @@ class TreeSearcherTest {
 
     @Test
     void DirectoriesSearcherTest() {
+        // given
         TreeSearcher processor = new TreeSearcher(root, dirsCondition);
         Set<Path> expRes = Set.of(dir1, dir10);
-
+        // when
         Set<Path> res = processor.compute();
-
+        // then
         assertEquals(expRes, res);
     }
 
@@ -93,8 +94,10 @@ class TreeSearcherTest {
 
     @Test
     void FilesSearcherTest() {
+        // given
         TreeSearcher processor = new TreeSearcher(root, filesCondition);
 
+        // when
         Set<Path> expRes = Set.of(
             dir1.resolve("file14"),
             dir10.resolve("file14"),
@@ -103,6 +106,7 @@ class TreeSearcherTest {
 
         Set<Path> res = processor.compute();
 
+        // then
         assertEquals(expRes, res);
     }
 

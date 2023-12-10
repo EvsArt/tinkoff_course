@@ -36,15 +36,17 @@ class MultithreadDFSTest {
 
     @Test
     void compute() {
-
+        // given
         Node tree = getTree();
         MultithreadDFS dfs1 = new MultithreadDFS(tree, 8);
         MultithreadDFS dfs2 = new MultithreadDFS(tree, 0);
         MultithreadDFS dfs3 = new MultithreadDFS(tree, 12);
 
+        // when
         List<Integer> solution1 = dfs1.getSolution();
         List<Integer> solution2 = dfs2.getSolution();
 
+        // then
         assertEquals(List.of(0, 2, 8), solution1);
         assertEquals(List.of(0), solution2);
 

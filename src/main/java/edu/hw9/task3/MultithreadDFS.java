@@ -28,13 +28,13 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
 
         int prevKey = needNodeValue;
         while (map.containsKey(prevKey)) {
-            res.addFirst(map.get(prevKey).value);
-            prevKey = map.get(prevKey).value;
+            res.addFirst(map.get(prevKey).getValue());
+            prevKey = map.get(prevKey).getValue();
         }
 
         res.add(needNodeValue);
 
-        if (res.size() == 1 && res.get(0) != startNode.value) {
+        if (res.size() == 1 && res.get(0) != startNode.getValue()) {
             throw new RuntimeException("Solution was not found");
         }
 
@@ -45,9 +45,9 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
     @Override
     protected Map<Integer, Node> compute() {
         Map<Integer, Node> res = new HashMap<>();
-        res.putAll(startNode.childs.stream()
+        res.putAll(startNode.getChilds().stream()
             .collect(Collectors.toMap(
-                it -> it.value,
+                Node::getValue,
                 it -> startNode
             )));
 
@@ -56,7 +56,7 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
         }
 
         List<MultithreadDFS> subTasks = new ArrayList<>();
-        for (Node child : startNode.childs) {
+        for (Node child : startNode.getChilds()) {
             MultithreadDFS task = new MultithreadDFS(child, needNodeValue);
             task.fork();
             subTasks.add(task);
@@ -68,9 +68,6 @@ public class MultithreadDFS extends RecursiveTask<Map<Integer, Node>> {
 
         return res;
 
-    }
-
-    public record NodeWithPrevNode(Node node, Node prevNode) {
     }
 
 }

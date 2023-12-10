@@ -16,9 +16,11 @@ class StatsCollectorTest {
 
     @Test
     void pushTest() throws InterruptedException {
+        // given
         int metricsSize = 32;
         int threadsCount = 16;
 
+        // when
         try (ExecutorService service = Executors.newFixedThreadPool(threadsCount)) {
             Stream.generate(() -> CompletableFuture.runAsync(
                     () -> collector.push("myMetr", new double[] {0.1, 0.4, 0.9}), service
@@ -30,6 +32,7 @@ class StatsCollectorTest {
 
         List<StatsCollector.Stat> stats = collector.stats();
 
+        // then
         assertThat(stats.size()).isEqualTo(32);
     }
 }
