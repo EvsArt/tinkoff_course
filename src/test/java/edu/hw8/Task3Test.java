@@ -25,23 +25,26 @@ class Task3Test {
         "'', 0"
     })
     void nextPasswordTest(String pass, String expNextPass) {
-
+        // given
         Task3 task3 = new Task3(infoFromDB);
 
+        // when
         String nextPath = task3.nextPassword(pass);
 
+        // then
         assertEquals(expNextPass, nextPath);
 
     }
 
     @Test
     void multiThreadingIsFasterTest() {
-
+        // given
         Task3 task30 = new Task3(infoFromDB);
         Task3 task31 = new Task3(infoFromDB);
         int maxPassLength = 4;
         int threadsCount = 8;
 
+        // when
         long time1 = System.nanoTime();
         System.out.println(task30.hackBD(maxPassLength));
         time1 = System.nanoTime() - time1;
@@ -50,13 +53,14 @@ class Task3Test {
         System.out.println(task31.hackBDInMultiThread(maxPassLength, threadsCount));
         time2 = System.nanoTime() - time2;
 
+        // then
         assertThat(time1).isGreaterThan(time2);
 
     }
 
     @Test
     void getTimeProfit() {
-
+        // No test data, only output
         for (int i = 1; i <= 64; i *= 2) {
             long threadTimeSum = System.nanoTime();
             for (int k = 0; k < 10; k++) {

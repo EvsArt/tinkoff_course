@@ -10,22 +10,26 @@ public class ServerClientTest {
 
     @Test
     void maxThreadsCountTest() throws InterruptedException {
-
+        // given
         int threadsCount = Constants.SERVER_THREADS_COUNT;
 
+        // when
         List<String> results = serverResponses(threadsCount, 8080);
 
+        // then
         assertTrue(results.size() == threadsCount && results.stream().noneMatch(String::isEmpty));
 
     }
 
     @Test
     void overMaxThreadsCountTest() throws InterruptedException {
-
+        // given
         int threadsCount = Constants.SERVER_THREADS_COUNT + 1;
 
+        // when
         List<String> results = serverResponses(threadsCount, 8081);
 
+        // then
         assertTrue(results.size() == threadsCount && results.stream().noneMatch(String::isEmpty));
 
     }

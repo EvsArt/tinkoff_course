@@ -8,35 +8,39 @@ class FixedThreadPoolTest {
 
     @Test
     void testMoreThreadsThanPoolHas() {
-
+        // given
         FixedThreadPool pool = FixedThreadPool.create(4);
 
+        // when
         for (int i = 0; i < 8; i++) {
             var k = i;
             pool.execute(() -> System.out.println(getFibonacci(k)));
         }
 
+        // then
         assertDoesNotThrow(pool::start);
 
     }
 
     @Test
     void testLessThreadsThanPoolHas() {
-
+        // when
         FixedThreadPool pool = FixedThreadPool.create(10);
 
+        // when
         for (int i = 0; i < 8; i++) {
             var k = i;
             pool.execute(() -> System.out.println(getFibonacci(k)));
         }
 
+        // then
         assertDoesNotThrow(pool::start);
 
     }
 
     @Test
     void testMultiThreadsWorksFaster() {
-
+        // given
         int threadsCount = 16;
 
         FixedThreadPool multiPool = FixedThreadPool.create(threadsCount);
@@ -48,6 +52,7 @@ class FixedThreadPoolTest {
             oneThreadPool.execute(() -> System.out.println(getFibonacci(k)));
         }
 
+        // when
         long time1 = System.nanoTime();
         multiPool.start();
         time1 = System.nanoTime() - time1;
@@ -56,6 +61,7 @@ class FixedThreadPoolTest {
         oneThreadPool.start();
         time2 = System.nanoTime() - time2;
 
+        // then
         assertThat(time1).isLessThan(time2);
     }
 

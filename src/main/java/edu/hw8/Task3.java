@@ -20,14 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Task3 {
 
-    private final Map<String, String> hashToUserName;
-    private final Map<String, String> userNameToPassword = new HashMap<>();
-    ReadWriteLock mapsLock = new ReentrantReadWriteLock();
-    private final MessageDigest oneThreadMd;
     private static final String ALGORITHM_NAME = "MD5";
     private static final String POSSIBLE_PASSWORD_CHARS =
         "0123456789abcdefghijklmnopqrstuvwxyz";
     private static final int POSSIBLE_PASSWORD_CHARS_COUNT = POSSIBLE_PASSWORD_CHARS.length();
+
+    private final Map<String, String> hashToUserName;
+    private final Map<String, String> userNameToPassword = new HashMap<>();
+    ReadWriteLock mapsLock = new ReentrantReadWriteLock();
+    private final MessageDigest oneThreadMd;
 
     public Task3(String infoFromDB) {
         hashToUserName = infoFromDB.lines()
@@ -39,7 +40,7 @@ public class Task3 {
         try {
             oneThreadMd = MessageDigest.getInstance(ALGORITHM_NAME);
         } catch (NoSuchAlgorithmException e) {
-            log.error("Error with creating an instance of MessageDigest");
+            log.error("Error with creating an instance of MessageDigest: algorithm {} was not found", ALGORITHM_NAME);
             throw new RuntimeException(e);
         }
     }
@@ -105,7 +106,7 @@ public class Task3 {
         while (count <= num) {
             count += (long) Math.pow(POSSIBLE_PASSWORD_CHARS_COUNT, len++);
         }
-        return len - 1;
+        return --len;
     }
 
     public Map<String, String> hackBD(int maxPassLength) {

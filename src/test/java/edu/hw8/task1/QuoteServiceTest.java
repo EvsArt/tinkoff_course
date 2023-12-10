@@ -13,13 +13,15 @@ class QuoteServiceTest {
     @Test
     @DisplayName("Test getting quotes")
     void getQuoteByWord() {
-
+        // given
         String keyWord1 = "голова";
         String keyWord2 = "acwsydcf7326";
 
+        // when
         String quote1 = service.getQuoteByWord(keyWord1);
         String quote2 = service.getQuoteByWord(keyWord2);
 
+        // then
         assertNotEquals(quote1.length(), 0);
         assertEquals(quote2, QuoteService.QUOTE_NOT_FOUND_MSG);
 
