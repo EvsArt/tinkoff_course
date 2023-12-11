@@ -1,36 +1,67 @@
 package edu.project4.model;
 
+import edu.project4.Constants;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public final class Transformations {
-
-    private Transformations() {
-    }
-
-    public static final int MAX_COLOR_VALUE = 255;
-
-    private static final Map<Transformation, Color> TRANSFORMATION_TO_COLOR_MAP = new HashMap<>();
-
-    private static final Transformation SIN_TRANS = (it) -> new Point(Math.sin(it.x()), Math.sin(it.y()));
-    private static final Transformation SPHERE_TRANS = (it) -> {
+@SuppressWarnings("MagicNumber")
+public enum Transformations {
+    LINEAR_TRANS((it) -> {
+        int kx = 4;
+        int ky = 4;
+        int bx = -2;
+        int by = -2;
+        Random localRandom = new Random();
+        double newX = (localRandom.nextDouble() * kx + bx) * it.x() + localRandom.nextDouble();
+        double newY = (localRandom.nextDouble() * ky + by) * it.y() + localRandom.nextDouble();
+        return new DecartPoint(newX, newY);
+    }),
+    HORSESHOE_TRANS((it) -> {
+        double x = it.x();
+        double y = it.y();
+        double r = Math.sqrt(x * x + y * y);
+        return new DecartPoint((x - y) * (x + y) / r, 2 * x * y / r);
+    }),
+    HANDKERCHIEF_TRANS((it) -> {
+        double x = it.x();
+        double y = it.y();
+        double r = Math.sqrt(x * x + y * y);
+        double atan = Math.atan(x / y);
+        return new DecartPoint(r * Math.sin(atan + r), r * Math.cos(atan - r));
+    }),
+    HYPERBOLIC_TRANS((it) -> {
+        double x = it.x();
+        double y = it.y();
+        double r = Math.sqrt(x * x + y * y);
+        double atan = Math.atan(x / y);
+        return new DecartPoint(Math.sin(atan) / r, r * Math.cos(atan));
+    }),
+    DIAMOND_TRANS((it) -> {
+        double x = it.x();
+        double y = it.y();
+        double r = Math.sqrt(x * x + y * y);
+        double atan = Math.atan(x / y);
+        return new DecartPoint(Math.sin(atan) * Math.cos(r), Math.cos(atan) * Math.sin(r));
+    }),
+    SPHERE_TRANS((it) -> {
         double x = it.x();
         double y = it.y();
         double r2 = x * x + y * y;
-        return new Point(x / r2, y / r2);
-    };
-
-    private static final Transformation POLAR_TRANS = (it) -> {
+        return new DecartPoint(x / r2, y / r2);
+    }),
+    POLAR_TRANS((it) -> {
         double x = it.x();
         double y = it.y();
         double newX = Math.atan(y / x) / Math.PI;
         double newY = Math.sqrt(x * x + y * y) - 1;
-        return new Point(newX, newY);
-    };
-
-    private static final Transformation HEART_TRANS = (it) -> {
+        return new DecartPoint(newX, newY);
+    }),
+    HEART_TRANS((it) -> {
         double x = it.x();
         double y = it.y();
         double r = Math.sqrt(x * x + y * y);
@@ -38,37 +69,50 @@ public final class Transformations {
         double ratan = r * Math.atan(y / x);
         double newX = sqrt * Math.sin(ratan);
         double newY = -sqrt * Math.cos(ratan);
-        return new Point(newX, newY);
-    };
-
-    private static final Transformation DISK_TRANS = (it) -> {
+        return new DecartPoint(newX, newY);
+    }),
+    DISK_TRANS((it) -> {
         double x = it.x();
         double y = it.y();
         double k = Math.atan(y / x) / Math.PI;
         double pir = Math.PI * Math.sqrt(x * x + y * y);
-        return new Point(k * Math.sin(pir), k * Math.cos(pir));
-    };
+        return new DecartPoint(k * Math.sin(pir), k * Math.cos(pir));
+    });
 
-    public static List<Transformation> getTransList = List.of(
-        SIN_TRANS,
-        SPHERE_TRANS,
-        POLAR_TRANS,
-        HEART_TRANS,
-        DISK_TRANS
-    );
+    private static final Random RANDOM = new Random();
+    private static final Map<Transformations, Color> TRANSFORMATION_TO_COLOR_MAP = new HashMap<>();
 
-    public static Transformation getRandomTrans() {
-        Random random = new Random();
-        return getTransList.get(random.nextInt(getTransList.size()));
+    private final Transformation trans;
+
+    Transformations(Transformation trans) {
+        this.trans = trans;
     }
 
-    public static Map<Transformation, Color> getTransColors() {
+    public Transformation getFunc() {
+        return trans;
+    }
+
+    public static Transformations getRandomTrans() {
+        int randomInd = RANDOM.nextInt(values().length);
+        return Transformations.values()[randomInd];
+    }
+
+    public static List<Transformations> getListOfRandomTrans(int size) {
+        List<Transformations> res = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            res.add(getRandomTrans());
+        }
+        return res;
+    }
+
+    public static Map<Transformations, Color> getTransColors() {
         if (TRANSFORMATION_TO_COLOR_MAP.isEmpty()) {
-            TRANSFORMATION_TO_COLOR_MAP.put(SIN_TRANS, Color.of(MAX_COLOR_VALUE, MAX_COLOR_VALUE, MAX_COLOR_VALUE));
-            TRANSFORMATION_TO_COLOR_MAP.put(SPHERE_TRANS, Color.of(0, MAX_COLOR_VALUE, 0));
-            TRANSFORMATION_TO_COLOR_MAP.put(POLAR_TRANS, Color.of(0, 0, MAX_COLOR_VALUE));
-            TRANSFORMATION_TO_COLOR_MAP.put(HEART_TRANS, Color.of(MAX_COLOR_VALUE, 0, 0));
-            TRANSFORMATION_TO_COLOR_MAP.put(DISK_TRANS, Color.of(MAX_COLOR_VALUE, 0, MAX_COLOR_VALUE));
+            Arrays.stream(Transformations.values())
+                .forEach((trans) -> TRANSFORMATION_TO_COLOR_MAP.put(trans, new Color(
+                    RANDOM.nextInt(Constants.MAX_COLOR_VALUE + 1),
+                    RANDOM.nextInt(Constants.MAX_COLOR_VALUE + 1),
+                    RANDOM.nextInt(Constants.MAX_COLOR_VALUE + 1)
+                )));
         }
         return TRANSFORMATION_TO_COLOR_MAP;
     }

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 
 public final class ImageUtils {
@@ -12,21 +14,44 @@ public final class ImageUtils {
     private ImageUtils() {
     }
 
-    public static void save(FractalImage data, Path path) throws IOException {
-        BufferedImage image = new BufferedImage(data.width(), data.height(), BufferedImage.TYPE_INT_ARGB);
+    public static void multiThreadSave(FractalImage data, Path path, int threadsCount) throws IOException {
+        BufferedImage image = new BufferedImage(data.width(), data.height(), BufferedImage.TYPE_4BYTE_ABGR);
+
+        ExecutorService threadPool = Executors.newFixedThreadPool(threadsCount);
+        for (int i = 0; i < data.height(); i++) {
+            int finalI = i;
+            threadPool.execute(() -> {
+                for (int j = 0; j < data.width(); j++) {
+                    Color color;
+                    if (data.isNull(j, finalI)) {
+                        color = new Color(0, 0, 0);
+                    } else {
+                        color = data.getPixel(j, finalI).getColor();
+                    }
+                    image.setRGB(j, finalI, color.getRGB());
+                }
+            });
+        }
+        threadPool.close();
+        String fileName = path.getFileName().toString();
+        ImageIO.write(image, fileName.substring(fileName.lastIndexOf(".") + 1), path.toFile());
+    }
+
+    public static void save(FractalImage data, Path path, int threadsCount) throws IOException {
+        BufferedImage image = new BufferedImage(data.width(), data.height(), BufferedImage.TYPE_4BYTE_ABGR);
 
         for (int i = 0; i < data.height(); i++) {
             for (int j = 0; j < data.width(); j++) {
-                edu.project4.model.Color color;
+                Color color;
                 if (data.isNull(j, i)) {
-                    color = edu.project4.model.Color.of(0, 0, 0);
+                    color = new Color(0, 0, 0);
                 } else {
                     color = data.getPixel(j, i).getColor();
                 }
-                Color awtColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getBrightness());
-                image.setRGB(j, i, awtColor.getRGB());
-                ImageIO.write(image, "png", path.toFile());
+                image.setRGB(j, i, color.getRGB());
             }
         }
+        String fileName = path.getFileName().toString();
+        ImageIO.write(image, fileName.substring(fileName.lastIndexOf(".") + 1), path.toFile());
     }
 }
