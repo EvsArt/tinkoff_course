@@ -42,7 +42,6 @@ public class MultiThreadRenderer extends Renderer {
         }
 
         List<Transformations> randomTrans = Transformations.getListOfRandomTrans(eqCount);
-
         for (int num = 0; num < n; num++) {
             threadPool.execute(() -> {
                 double newX = ThreadLocalRandom.current().nextDouble(xMax - xMin) + xMin;
@@ -59,9 +58,9 @@ public class MultiThreadRenderer extends Renderer {
                         List<DecartPoint> points = getAllSymmetricPoints(newPoint, symmetricValue);
                         for (DecartPoint symPoint : points) {
                             int x1 = image.width()
-                                    - (int) Math.round(((xMax - symPoint.x()) / (xMax - xMin)) * image.width());
+                                - (int) Math.round(((xMax - symPoint.x()) / (xMax - xMin)) * image.width());
                             int y1 = image.height()
-                                    - (int) Math.round(((yMax - symPoint.y()) / (yMax - yMin)) * image.height());
+                                - (int) Math.round(((yMax - symPoint.y()) / (yMax - yMin)) * image.height());
 
                             if (x1 > 0 && x1 < image.width() && y1 < image.height() && y1 > 0) {
                                 Pixel pixel = image.getPixel(x1, y1);
@@ -93,14 +92,7 @@ public class MultiThreadRenderer extends Renderer {
 
         double max = Arrays.stream(image.data())
             .parallel()
-            .map((row -> Arrays.stream(row)
-                .filter(Objects::nonNull)
-                .filter(pix -> pix.getHitsCount() != 0)
-                .map((pix -> {
-                    pix.setNormal(log10(pix.getHitsCount()));
-                    return pix.getNormal();
-                }))
-                .max(Comparator.naturalOrder()).orElse(0.0)))
+            .map(this::getMaxLogNormalFromPixelArray)
             .max(Comparator.naturalOrder()).get();
 
         Arrays.stream(image.data())
@@ -116,13 +108,17 @@ public class MultiThreadRenderer extends Renderer {
                     ));
                 }));
 
-        for (int y = 0; y < image.height(); y++) {
-            for (int x = 0; x < image.width(); x++) {
-                Pixel pixel = image.getPixel(x, y);
+    }
 
-            }
-        }
-
+    private double getMaxLogNormalFromPixelArray(Pixel[] arr) {
+        return Arrays.stream(arr)
+            .filter(Objects::nonNull)
+            .filter(pixel -> pixel.getHitsCount() != 0)
+            .map((pixel -> {
+                pixel.setNormal(log10(pixel.getHitsCount()));
+                return pixel.getNormal();
+            }))
+            .max(Comparator.naturalOrder()).orElse(0.0);
     }
 
 }

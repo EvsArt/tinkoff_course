@@ -18,6 +18,7 @@ import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
 public class Renderer {
+
     public static final int FINDING_START_ITERATIONS = 20;
 
     private final Random random = new Random();

@@ -23,22 +23,22 @@ public class Application {
         Renderer renderer2 = new MultiThreadRenderer();
         try {
             FractalImage image = FractalImage.create(Constants.X_RES, Constants.Y_RES);
-//            long time1 = System.nanoTime();
-//            renderer1.render(
-//                Constants.SAMPLE_COUNT,
-//                Constants.AFFINE_FUNCTIONS_COUNT,
-//                Constants.ITERATIONS_IN_SAMPLE,
-//                Constants.SYMMETRIC_VALUE,
-//                image
-//            );
-//            renderer1.correction(image);
-//            Files.createDirectories(imgDir);
-//            ImageUtils.save(
-//                image,
-//                imgDir.resolve(UUID.randomUUID() + "." + Constants.IMAGE_FORMAT),
-//                Constants.THREAD_COUNT
-//            );
-//            time1 = System.nanoTime() - time1;
+            long time1 = System.nanoTime();
+            renderer1.render(
+                Constants.SAMPLE_COUNT,
+                Constants.AFFINE_FUNCTIONS_COUNT,
+                Constants.ITERATIONS_IN_SAMPLE,
+                Constants.SYMMETRIC_VALUE,
+                image
+            );
+            renderer1.correction(image);
+            Files.createDirectories(imgDir);
+            ImageUtils.save(
+                image,
+                imgDir.resolve(UUID.randomUUID() + "." + Constants.IMAGE_FORMAT),
+                Constants.THREAD_COUNT
+            );
+            time1 = System.nanoTime() - time1;
 
             long time2 = System.nanoTime();
             image = FractalImage.create(Constants.X_RES, Constants.Y_RES);
@@ -58,9 +58,9 @@ public class Application {
             );
             Files.createDirectories(imgDir);
 
-//            log.info("One thread: " + time1 / NANO_SEC_IN_MILLI_SEC + "ms");
-            log.info(Constants.THREAD_COUNT + " threads: " + time2 / NANO_SEC_IN_MILLI_SEC + "ms");
-//            log.info(String.valueOf((double) time1 / time2));
+            log.info(String.format("One thread: %d ms", time1 / NANO_SEC_IN_MILLI_SEC));
+            log.info(String.format("%d threads: %d ms", Constants.THREAD_COUNT, time2 / NANO_SEC_IN_MILLI_SEC));
+            log.info(String.format("Multithread %f times faster", (double) time1 / time2));
         } catch (IOException e) {
             log.error("Error with writing image to dir {}", imgDir);
             throw new RuntimeException(e);
