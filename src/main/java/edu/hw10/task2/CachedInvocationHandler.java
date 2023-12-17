@@ -1,5 +1,6 @@
 package edu.hw10.task2;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -7,14 +8,15 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CachedInvocationHandler implements InvocationHandler {
 
     private final Object original;
-    private final Map<Object, Object> cachedValues = new HashMap<>();
+    Boolean isNeedToCache = null;
+    Boolean isPersist = null;
+    private Map<Object, Object> cachedValues;
 
     public <T> CachedInvocationHandler(T object) {
         this.original = object;
@@ -23,10 +25,26 @@ public class CachedInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object o, Method method, Object[] objects) {
 
-        Annotation cacheAnno = Arrays.stream(method.getAnnotations())
-            .filter(it -> it.annotationType().equals(Cache.class)).findFirst().orElse(null);
+        if (isNeedToCache == null) {
+            Annotation cacheAnno = Arrays.stream(method.getAnnotations())
+                .filter(it -> it.annotationType().equals(Cache.class)).findFirst().orElse(null);
+            isNeedToCache = cacheAnno != null;
+            if (isNeedToCache) {
+                isPersist = ((Cache) cacheAnno).persist();
+                if (!isPersist) {
+                    cachedValues = new HashMap<>();
+                } else {
+                    try {
+                        cachedValues = new DiskMap(Constants.STORAGE_PATH);
+                    } catch (IOException e) {
+                        log.error("Unable to create disk map by path {}", Constants.STORAGE_PATH);
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
 
-        if (Objects.nonNull(cacheAnno) && cachedValues.containsKey(Arrays.hashCode(objects))) {
+        if (isNeedToCache && cachedValues.containsKey(Arrays.hashCode(objects))) {
             return cachedValues.get(Arrays.hashCode(objects));
         }
 
@@ -45,7 +63,7 @@ public class CachedInvocationHandler implements InvocationHandler {
             );
             throw new RuntimeException(e);
         }
-        if (Objects.nonNull(cacheAnno)) {
+        if (isNeedToCache) {
             cachedValues.put(Arrays.hashCode(objects), res);
         }
         return res;

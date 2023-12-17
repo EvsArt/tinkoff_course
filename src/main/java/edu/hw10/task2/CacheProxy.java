@@ -2,7 +2,7 @@ package edu.hw10.task2;
 
 import java.lang.reflect.Proxy;
 
-public class CacheProxy {
+public final class CacheProxy {
 
     private CacheProxy() {
     }
