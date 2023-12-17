@@ -3,11 +3,17 @@ package edu.hw10.task2;
 import java.io.IOException;
 import java.nio.file.Files;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class CachedFibCalculatorImplTest {
+
+    @BeforeAll
+    static void createDirs() throws IOException {
+        Files.createDirectories(Constants.STORAGE_PATH);
+    }
 
     @BeforeEach
     void clearEach() throws IOException {
