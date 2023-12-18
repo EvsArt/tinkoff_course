@@ -235,7 +235,7 @@
                     </executions>
                     <configuration>
                         <excludes>
-                            <exclude>**/edu/hw11/task2/**</exclude>
+                            <exclude>**/hw11/task2/**</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
